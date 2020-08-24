@@ -1,0 +1,390 @@
+#!/bin/bash
+#
+# Copyright(c) 2020 Intel Corporation
+# SPDX-License-Identifier: BSD-3-Clause-Clear
+#
+
+# To make additional packages creation possible
+# through this script all you need to do is:
+# - add 'case' command to set variable GENERATE_<NAME>="generate_<name>"
+# - add function 'generate_<name>' to handle the task
+# - add 'DEPENDENCIES_<NAME>' array if needed
+# - update help!
+
+
+NAME="open-cas-linux"
+SUPPORTED_FROM_VERSION="20.03"
+THIS="$(basename $0)"
+ARCH="$(uname -i)"
+SCRIPT_BASE_DIR="$(dirname $(realpath $0))"
+BASE_SPEC="$SCRIPT_BASE_DIR/$NAME.spec.base"
+TEMP_TEMPLATE="opencas-${THIS}"
+DEPENDENCIES=(sed git mktemp rsync)
+# Dependencies for particular packages creation:
+DEPENDENCIES_TAR=(tar)
+DEPENDENCIES_ZIP=(zip)
+DEPENDENCIES_RPM=(tar rpmbuild)
+DEPENDENCIES_SRPM=("${DEPENDENCIES_RPM[@]}")
+# List of relative submodule directories:
+SUBMODULES=(
+    "ocf"
+    "test/functional/test-framework"
+)
+
+# Unset all variables that may be checked for existence:
+unset ${!GENERATE_*} ARCHIVE_PREPARED DEBUG FAILED_DEPS OUTPUT_DIR RPM_BUILT\
+      SOURCES_DIR SUBMODULES_MISSING TAR_CREATED
+
+
+usage() {
+    echo "Usage:"
+    echo "  ./$THIS <commands> [options] <SOURCES_PATH>"
+    echo "  ./$THIS -c|-h"
+    echo "where SOURCES_PATH is the root directory of OpenCAS sources"
+}
+
+print_help() {
+    echo "Generate OpenCAS packages."
+    echo "$(usage)"
+    echo
+    echo "This script generates various OpenCAS packages like"
+    echo "release archives (tar, zip) and RPMs (source and binary)."
+    echo
+    echo "Mandatory arguments to long options are mandatory for short options too."
+    echo
+    echo "Commands:"
+    echo "  tar                             generate tar archive"
+    echo "  zip                             generate zip archive"
+    echo "  rpm                             generate RPM packages"
+    echo "  srpm                            generate SRPM package"
+    echo
+    echo "Options:"
+    echo "  -o, --output-dir <DIR>          put all created files in the given directory;"
+    echo "                                  default: 'SOURCES_PATH/packages/'"
+    echo "  -d, --debug                     create all debug files and packages as well"
+    echo "  -c, --clean                     clean all temporary files and folders that"
+    echo "                                  may have been left around if $THIS ended"
+    echo "                                  unexpectedly in the previous run"
+    echo "  -h, --help                      print this help message"
+    echo
+}
+
+invalid_usage() {
+    echo -e "$THIS: $*\nTry './$THIS --help' for more information." >&2
+    exit 2
+}
+
+info() {
+    echo -e "\e[33m$*\e[0m"
+}
+
+error() {
+    echo -e "\e[31mERROR\e[0m: $THIS: $*" >&2
+    exit 1
+}
+
+clean() {
+    rm -rf "$TEMP_DIR"
+    if [ -d "$TEMP_DIR" ]; then
+        # Print only warning to not confuse the user by an error here
+        # if packages were created successfully and everything else
+        # went fine except cleaning temp directory at the end.
+        info "WARNING: Cleanup failed" >&2
+    fi
+}
+
+clean_all() {
+    info "Removing all temp files and dirs that may have been left around..."
+    rm -rf "/tmp/${TEMP_TEMPLATE}."*
+    if ls "/tmp/${TEMP_TEMPLATE}."* &>/dev/null; then
+        # This function on the other hand is called only by a '-c' option
+        # so we may throw an error here and exit.
+        error "cleanup failed"
+    fi
+}
+
+check_options() {
+    if [ ! "$SOURCES_DIR" ]; then
+        invalid_usage "no mandatory SOURCES_PATH provided"
+    elif [[ $(head -n 1 "$SOURCES_DIR/README.md" 2>/dev/null) != *Open*CAS*Linux* ]]; then
+        invalid_usage "'$SOURCES_DIR' does not point to the root directory of CAS sources"
+    elif [ ! "${!GENERATE_*}" ]; then
+        invalid_usage "nothing to do - no command provided"
+    fi
+}
+
+check_version() {
+    if ! (cd $(dirname "$CAS_VERSION_GEN") && ./$(basename "$CAS_VERSION_GEN")); then
+        error "failed to obtain CAS version"
+    fi
+    . "$VERSION_FILE"
+
+    VERSION_SHORT="${CAS_VERSION_MAIN}.$(printf %02d ${CAS_VERSION_MAJOR})"
+    if [ $CAS_VERSION_MINOR -ne 0 ]; then
+        VERSION_SHORT+=".${CAS_VERSION_MINOR}"
+    fi
+    if [[ "$VERSION_SHORT" < "$SUPPORTED_FROM_VERSION" ]]; then
+        echo "Sorry... this version of $NAME ($VERSION_SHORT) is not supported"\
+             "by $THIS. Use $NAME >= $SUPPORTED_FROM_VERSION"
+        exit 1
+    fi
+
+    for SUBMOD in ${SUBMODULES[@]}; do
+        if ! ls -A "$SOURCES_DIR/$SUBMOD/"* &>/dev/null; then
+            local SUBMODULES_MISSING+="'$SUBMOD'\n"
+        fi
+    done
+    if [ "$SUBMODULES_MISSING" ]; then
+        error "There are missing submodules:\n${SUBMODULES_MISSING}\nUpdate submodules and try again!"
+    fi
+}
+
+check_dependencies() {
+    echo "--- Checking for dependencies"
+    for package in ${!GENERATE_*}; do
+        local DEP_NAME="DEPENDENCIES_${package##*_}[@]"
+        DEPENDENCIES+=(${!DEP_NAME})
+    done
+    for DEP in ${DEPENDENCIES[@]}; do
+        if ! which $DEP &>/dev/null; then
+            local FAILED_DEPS+="$DEP "
+        fi
+    done
+
+    if [ "$FAILED_DEPS" ]; then
+        error "Dependencies not installed. You need to provide these programs first: $FAILED_DEPS"
+    fi
+}
+
+create_dir() {
+    mkdir -p "$*"
+    if [ ! -d "$*" ] || [ ! -w "$*" ]; then
+        error "no access to '$*'"
+    fi
+}
+
+create_temp() {
+    TEMP_DIR=$(mktemp -d -t ${TEMP_TEMPLATE}.XXXXXXXXXX)
+    if [ $? -ne 0 ]; then
+        error "couldn't create temporary directory"
+    fi
+}
+
+archive_prepare() {
+    if [ "$ARCHIVE_PREPARED" ]; then
+        return 0
+    fi
+
+    echo "--- Copying sources to the working directory"
+    local TEMP_SOURCES_DIR="$TEMP_DIR/$CAS_FILENAME"
+    rm -rf "$TEMP_SOURCES_DIR"
+    mkdir -p "$TEMP_SOURCES_DIR"
+    rsync -a --exclude={/packages,.git*,.pep8speaks.yml} "$SOURCES_DIR/" "$TEMP_SOURCES_DIR"
+
+    ARCHIVE_PREPARED="archive_prepared"
+}
+
+generate_tar() {
+    if [ ! "$TAR_CREATED" ]; then
+        archive_prepare
+        echo "--- Creating tar archive from current sources"
+        tar -C "$TEMP_DIR" -zcf "$TEMP_DIR/$SOURCES_TAR_NAME" "$CAS_FILENAME"
+        if [ $? -ne 0 ] || [ ! -f "$TEMP_DIR/$SOURCES_TAR_NAME" ]; then
+            rm -rf "$TEMP_DIR/$SOURCES_TAR_NAME"
+            error "couldn't create tar archive"
+        fi
+
+        TAR_CREATED="tar_created"
+    fi
+
+    if [ "$1" != "temp" ]; then
+        cp "$TEMP_DIR/$SOURCES_TAR_NAME" "$OUTPUT_DIR"
+    fi
+}
+
+generate_zip() {
+    archive_prepare
+    echo "--- Creating zip archive from current sources"
+    (cd "$TEMP_DIR" && zip -qr - "$CAS_FILENAME") > "$OUTPUT_DIR/$SOURCES_ZIP_NAME"
+    if [ $? -ne 0 ] || [ ! -f "$OUTPUT_DIR/$SOURCES_ZIP_NAME" ]; then
+        rm -rf "$OUTPUT_DIR/$SOURCES_ZIP_NAME"
+        error "couldn't create zip archive"
+    fi
+}
+
+rpm_create_tree() {
+    echo "--- Creating directory tree for building RPMs"
+    mkdir -p "$RPM_BUILD_DIR/"{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+    if [ $? -ne 0 ] || [ ! -w "$RPM_BUILD_DIR" ]; then
+        error "couldn't create directory tree for building RPMs"
+    fi
+}
+
+rpm_obtain_sources() {
+    echo "--- Obtaining CAS sources for RPMs"
+    generate_tar temp
+    cp -v "$TEMP_DIR/$SOURCES_TAR_NAME" "$RPM_SOURCES_DIR"
+
+    if [ ! -f "$RPM_SOURCES_DIR/$SOURCES_TAR_NAME" ]; then
+        error "couldn't obtain $SOURCES_TAR_NAME sources tarball!"
+    fi
+}
+
+rpm_spec_prepare() {
+    echo "--- Preparing SPEC file"
+    if [ ! -f "$BASE_SPEC" ]; then
+        error "SPEC file '$BASE_SPEC' not found"
+    fi
+
+    cp -v "$BASE_SPEC" "$RPM_SPECS_DIR/$NAME.spec"
+    sed -i "s/<CAS_VERSION>/$CAS_VERSION/g" "$RPM_SPECS_DIR/$NAME.spec"
+    if [ "$DEBUG" ]; then
+        echo "---   Debug RPMs will be built as well"
+        sed -i "s/%define debug_package %{nil}//g" "$RPM_SPECS_DIR/$NAME.spec"
+    fi
+
+    if [ ! -f "$RPM_SPECS_DIR/$NAME.spec" ]; then
+        error "couldn't create a SPEC file"
+    fi
+}
+
+generate_rpm() {
+    if [ "$RPM_BUILT" ]; then
+        return 0
+    fi
+
+    rpm_create_tree
+    rpm_obtain_sources
+    rpm_spec_prepare
+
+    if [ ! "$GENERATE_SRPM" ] && [ "$GENERATE_RPM" ]; then
+        echo "--- Building binary RPM packages"
+        (HOME="$TEMP_DIR"; rpmbuild -bb "$RPM_SPECS_DIR/$NAME.spec")
+        if [ $? -ne 0 ]; then
+            error "couldn't create RPM packages"
+        fi
+        mv -t "$OUTPUT_DIR" "$RPM_RPMS_DIR/$ARCH"/*
+    fi
+    if [ "$GENERATE_SRPM" ] && [ ! "$GENERATE_RPM" ]; then
+        echo "--- Building source SRPM package"
+        (HOME="$TEMP_DIR"; rpmbuild -bs "$RPM_SPECS_DIR/$NAME.spec")
+        if [ $? -ne 0 ]; then
+            error "couldn't create SRPM package"
+        fi
+        mv -t "$OUTPUT_DIR" "$RPM_SRPMS_DIR"/*
+    fi
+    if [ "$GENERATE_SRPM" ] && [ "$GENERATE_RPM" ]; then
+        echo "--- Building source and binary RPM packages"
+        (HOME="$TEMP_DIR"; rpmbuild -ba "$RPM_SPECS_DIR/$NAME.spec")
+        if [ $? -ne 0 ]; then
+            error "couldn't create RPM packages"
+        fi
+        mv -t "$OUTPUT_DIR" "$RPM_SRPMS_DIR"/*
+        mv -t "$OUTPUT_DIR" "$RPM_RPMS_DIR/$ARCH"/*
+    fi
+
+    RPM_BUILT="rpm_built"
+}
+
+generate_srpm() {
+    generate_rpm
+}
+
+
+if (( ! $# )); then
+    invalid_usage "no arguments given\n$(usage)\n"
+fi
+
+while (( $# )); do
+    case "$1" in
+        tar)
+            GENERATE_TAR="generate_tar"
+            ;;
+        zip)
+            GENERATE_ZIP="generate_zip"
+            ;;
+        rpm)
+            GENERATE_RPM="generate_rpm"
+            ;;
+        srpm)
+            GENERATE_SRPM="generate_srpm"
+            ;;
+        --output-dir|-o)
+            OUTPUT_DIR="$2"
+            if ! dirname $OUTPUT_DIR &>/dev/null; then
+                invalid_usage "no output directory given after the '--output-dir' option"
+            fi
+            shift
+            ;;
+        --debug|-d)
+            DEBUG="debug"
+            ;;
+        --clean|-c)
+            clean_all
+            exit 0
+            ;;
+        --help|-h)
+            print_help
+            exit 0
+            ;;
+        *)
+            if [ -d "$1" ]; then
+                SOURCES_DIR=$(realpath "$1")
+            else
+                invalid_usage "option '$1' not recognized"
+            fi
+            ;;
+    esac
+    shift
+done
+
+check_options
+
+trap clean EXIT
+create_temp
+
+
+### Variables that relates on arguments passed to this script:
+
+# By default all created packages will be put in:
+: ${OUTPUT_DIR:="$SOURCES_DIR/packages"}
+# RPM building directories:
+RPM_BUILD_DIR="$TEMP_DIR/rpmbuild"
+RPM_SOURCES_DIR="$RPM_BUILD_DIR/SOURCES"
+RPM_SPECS_DIR="$RPM_BUILD_DIR/SPECS"
+RPM_RPMS_DIR="$RPM_BUILD_DIR/RPMS"
+RPM_SRPMS_DIR="$RPM_BUILD_DIR/SRPMS"
+# Version file location:
+VERSION_FILE="$SOURCES_DIR/.metadata/cas_version"
+# CAS version generator location:
+CAS_VERSION_GEN="$SOURCES_DIR/utils/cas_version_gen"
+
+check_version
+
+# CAS naming convention:
+CAS_FILENAME="$NAME-$CAS_VERSION"
+# CAS sources archives filenames:
+SOURCES_TAR_NAME="$CAS_FILENAME.tar.gz"
+SOURCES_ZIP_NAME="$CAS_FILENAME.zip"
+
+
+
+#
+# Run the package generator script
+#
+
+info "\n=== Running OpenCAS '$CAS_VERSION' package generator ===\n"
+
+echo -n "Packages that will be built: "
+for package in ${!GENERATE_*}; do
+    echo -en "\e[33m${package##*_}\e[0m "
+done
+echo -e "\n"
+
+check_dependencies
+create_dir "$OUTPUT_DIR"
+for package in ${!GENERATE_*}; do
+    ${package,,}
+done
+
+echo -e "\n\e[32m=== ALL DONE ===\e[0m\n\nYou can find your fresh packages in '$OUTPUT_DIR'\n"

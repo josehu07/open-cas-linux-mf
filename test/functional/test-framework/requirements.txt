@@ -1,0 +1,12 @@
+pytest==4.4.0
+multimethod==1.1
+paramiko==2.6.0
+IPy==1.00
+aenum==2.2.1
+packaging==19.1
+python-secrets==19.9.0
+typing==3.7.4.1
+pyyaml>=5.1
+lxml>=4.4.1
+wget>=3.2
+attotime>=0.2.0
