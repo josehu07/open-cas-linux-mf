@@ -1,9 +1,0 @@
-__pycache__
-pyocf/__pycache__
-pyocf/libocf.so
-*.o
-pyocf/ocf/*
-*.pyc
-*.gcov
-*.gcda
-*.gcno
