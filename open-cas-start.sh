@@ -1,9 +1,9 @@
-DEV_CORE=/dev/disk/by-id/wwn-0x5000c5007de2030f 			# /dev/sdb
-DEV_CACHE=/dev/disk/by-id/ata-INTEL_SSDSC2BB480G4_PHWL444303SP480QGN 	# /dev/sdc
+DEV_CORE=/dev/disk/by-id/wwn-0x5000c5007de2030f                         # /dev/sdb
+DEV_CACHE=/dev/disk/by-id/ata-INTEL_SSDSC2BB480G4_PHWL444303SP480QGN    # /dev/sdc
 
-# Format core device as EXT3 file system.
+# Format core device as EXT4 file system.
 echo "\nFormatting core device...\n"
-# sudo mkfs.ext3 ${DEV_CORE}
+# sudo mkfs.ext4 ${DEV_CORE}
 
 # Setup SSD device as CAS cache ID #1, using WT mode.
 echo "\nStarting SSD as cache device #1, mode = wt...\n"
