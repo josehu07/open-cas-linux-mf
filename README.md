@@ -5,12 +5,142 @@ This is Guanzhou's fork of Intel's Open-CAS Linux cache accelaration system.
 
 ## Overview
 
-TODO
+Folder structure:
+
+```text
+# This is the `casadm` CLI management tool.
+# Added `-M` & `-N` command options and `mfwa|mfwb|mfwt` cache modes.
+casadm/
+ |- cas_main.c
+ |- cas_lib.c
+ |- cas_lib.h
+ |- ...
+```
+
+```text
+# These are CAS kernel modules loaded into the kernel, i.e., the Linux context.
+# New commands support added here.
+modules/
+ |- cas_cache/  # This is the `cas_cache` ko, Linux control cdev also implemented here
+ |   |- service_ui_ioctl.c
+ |   |- layer_cache_management.c
+ |   |- ...
+ |- cas_disk/   # This is the `cas_disk` core device ko
+ |- include/
+ |   | cas_ioctl_codes.h
+ |- ...
+```
+
+```text
+# This is the OCF.
+# MFC plugins ported to use Linux kernel headers only.
+ocf/
+ |- ...
+```
+
+Everything I have added/modified are marked by [Orthus FLAG BEGIN] and [Orthus FLAG END] for easier future reference.
 
 
 ## Usage
 
-TODO
+Tested on the following platforms:
+
+- Ubuntu 18.04 LTS
+
+Clone the repo recursively (there is a submodule - the OCF framework):
+
+```bash
+$ git clone --recursive git@github.com:josehu07/open-cas-linux-mf.git
+$ cd open-cas-linux-mf
+$ git submodule update --init --update
+```
+
+### Install Open-CAS-Linux
+
+Make sure you have full Linux kernel headers installed.
+
+At the top-level folder, compile by:
+
+```bash
+$ sudo ./configure
+$ make
+```
+
+Then, install by:
+
+```bash
+$ sudo make install
+```
+
+Check your installation is successful:
+
+```bash
+$ sudo casadm -V
+```
+
+### Setting Up an MFC Cache
+
+Once installed, you can set up Open-CAS to start a cache on a device, add another device as a core to the cache, and then mount the virtual `/dev/casX-Y` block device to some path.
+
+First, be sure to format the core device to desired FS type:
+
+```bash
+$ sudo mkfs.ext4 /dev/yyy
+```
+
+Start the cache and add a core:
+
+```bash
+$ sudo casadm -S -d /dev/xxx            # Start cache in WT mode as cache_id = 1
+$ sudo casadm -A -d /dev/yyy -i 1       # Add a core device to cache 1
+$ sudo casadm -L                        # List current CAS status
+```
+
+Then, start the monitor and switch the cache to a multi-factor cache mode, for example `mfwa`:
+
+```bash
+$ sudo casadm -M -i 1 -j 1              # Start multi-factor monitor to monitor core 1-1
+$ sudo casadm -Q -i 1 -c mfwa           # Switch cache 1 to Multi-Factor Write-Around
+```
+
+Verify that the cache mode has changed:
+
+```bash
+$ sudo casadm -L
+```
+
+Now, you can mount the virtual CAS device to a path and starting using Open-CAS-Linux:
+
+```bash
+$ sudo mount /dev/cas1-1 /mnt/some_path
+```
+
+### Terminating an MFC Cache
+
+**IMPORTANT**: You should **first switch the cache to non-mf mode and stop the monitor**. Otherwise, directly unmounting or terminating the cache will make your kernel stuck. Do this by:
+
+```bash
+$ sudo casadm -Q -i 1 -c pt             # Swtich cache 1 to Pass-Through mode
+$ sudo casadm -N                        # Stop the running multi-factor monitor
+```
+
+Unmount the virtual device:
+
+```bash
+$ sudo umount /mnt/some_path
+```
+
+Then, terminate the cache:
+
+```bash
+$ sudo casadm -T -i 1                   # Terminate cache 1
+```
+
+Make sure that no cache is now running:
+
+```bash
+$ sudo casadm -L
+```
 
 
 ## Original README
