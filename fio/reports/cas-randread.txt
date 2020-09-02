@@ -1,0 +1,42 @@
+cas-randread: (g=0): rw=randread, bs=(R) 4096B-4096B, (W) 4096B-4096B, (T) 4096B-4096B, ioengine=libaio, iodepth=16
+...
+fio-3.1
+Starting 8 processes
+cas-randread: Laying out IO file (1 file / 1024MiB)
+cas-randread: Laying out IO file (1 file / 1024MiB)
+cas-randread: Laying out IO file (1 file / 1024MiB)
+cas-randread: Laying out IO file (1 file / 1024MiB)
+cas-randread: Laying out IO file (1 file / 1024MiB)
+cas-randread: Laying out IO file (1 file / 1024MiB)
+cas-randread: Laying out IO file (1 file / 1024MiB)
+cas-randread: Laying out IO file (1 file / 1024MiB)
+
+cas-randread: (groupid=0, jobs=8): err= 0: pid=19528: Mon Aug 31 17:55:16 2020
+   read: IOPS=367k, BW=1434MiB/s (1504MB/s)(336GiB/240001msec)
+    slat (usec): min=6, max=822, avg=13.14, stdev= 3.75
+    clat (usec): min=12, max=1684, avg=334.66, stdev=20.83
+     lat (usec): min=24, max=1694, avg=347.92, stdev=20.91
+    clat percentiles (usec):
+     |  1.00th=[  306],  5.00th=[  318], 10.00th=[  322], 20.00th=[  326],
+     | 30.00th=[  330], 40.00th=[  330], 50.00th=[  334], 60.00th=[  334],
+     | 70.00th=[  338], 80.00th=[  338], 90.00th=[  347], 95.00th=[  355],
+     | 99.00th=[  469], 99.50th=[  474], 99.90th=[  490], 99.95th=[  498],
+     | 99.99th=[  562]
+   bw (  KiB/s): min=118706, max=205755, per=12.52%, avg=183852.73, stdev=9019.72, samples=3836
+   iops        : min=29676, max=51438, avg=45962.98, stdev=2254.92, samples=3836
+  lat (usec)   : 20=0.01%, 50=0.01%, 100=0.01%, 250=0.01%, 500=99.95%
+  lat (usec)   : 750=0.05%, 1000=0.01%
+  lat (msec)   : 2=0.01%
+  cpu          : usr=10.59%, sys=65.16%, ctx=35895861, majf=0, minf=827
+  IO depths    : 1=0.1%, 2=0.1%, 4=0.1%, 8=0.1%, 16=100.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.1%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwt: total=88123401,0,0, short=0,0,0, dropped=0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=16
+
+Run status group 0 (all jobs):
+   READ: bw=1434MiB/s (1504MB/s), 1434MiB/s-1434MiB/s (1504MB/s-1504MB/s), io=336GiB (361GB), run=240001-240001msec
+
+Disk stats (read/write):
+    cas1-1: ios=88071982/14, merge=0/71, ticks=29570204/24, in_queue=0, util=0.00%, aggrios=0/15, aggrmerge=0/0, aggrticks=0/0, aggrin_queue=0, aggrutil=0.00%
+  sdc: ios=0/15, merge=0/0, ticks=0/0, in_queue=0, util=0.00%

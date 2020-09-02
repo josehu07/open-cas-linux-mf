@@ -113,6 +113,19 @@ struct kcas_insert_core {
 	int ext_err_code;
 };
 
+/*========== [Orthus FLAG BEGIN] ==========*/
+struct kcas_mf_monitor_start {
+	uint16_t cache_id; /**< id of a running cache */
+	uint16_t core_id; /**< id core object to monitor. */
+
+	int ext_err_code;
+};
+
+struct kcas_mf_monitor_stop {
+	int ext_err_code;
+};
+/*========== [Orthus FLAG END] ==========*/
+
 struct kcas_remove_core {
 	uint16_t cache_id; /**< id of an running cache */
 	uint16_t core_id; /**< id core object to be removed */
@@ -414,6 +427,12 @@ struct kcas_get_cache_param {
  *    36    *    KCAS_IOCTL_PURGE_CORE                      *    OK            *
  *******************************************************************************
  */
+ /*========== [Orthus FLAG BEGIN] ==========*/
+/*
+ *    37    *    KCAS_IOCTL_MF_MONITOR_START                *    OK            *
+ *    38    *    KCAS_IOCTL_MF_MONITOR_STOP                 *    OK            *
+ */
+ /*========== [Orthus FLAG END] ==========*/
 
 /** \cond SKIP_IN_DOC */
 #define KCAS_IOCTL_MAGIC (0xBA)
@@ -509,6 +528,11 @@ struct kcas_get_cache_param {
 /* Flush dirty data from running core object
  * and invalidate all valid cache lines associated with given core. */
 #define KCAS_IOCTL_PURGE_CORE _IOWR(KCAS_IOCTL_MAGIC, 36, struct kcas_flush_core)
+
+/*========== [Orthus FLAG BEGIN] ==========*/
+#define KCAS_IOCTL_MF_MONITOR_START _IOWR(KCAS_IOCTL_MAGIC, 37, struct kcas_mf_monitor_start)
+#define KCAS_IOCTL_MF_MONITOR_STOP _IOWR(KCAS_IOCTL_MAGIC, 38, struct kcas_mf_monitor_stop)
+/*========== [Orthus FLAG END] ==========*/
 
 /**
  * Extended kernel CAS error codes

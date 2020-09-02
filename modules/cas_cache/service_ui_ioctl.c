@@ -390,7 +390,29 @@ long cas_service_ioctl_ctrl(struct file *filp, unsigned int cmd,
 		RETURN_CMD_RESULT(cmd_info, arg, retval);
 	}
 
+	/*========== [Orthus FLAG BEGIN] ==========*/
+	case KCAS_IOCTL_MF_MONITOR_START: {
+		struct kcas_mf_monitor_start *cmd_info;
+
+		GET_CMD_INFO(cmd_info, arg);
+
+		retval = cache_mngt_mf_monitor_start(cmd_info);
+
+		RETURN_CMD_RESULT(cmd_info, arg, retval);
+	}
+	case KCAS_IOCTL_MF_MONITOR_STOP: {
+		struct kcas_mf_monitor_stop *cmd_info;
+
+		GET_CMD_INFO(cmd_info, arg);
+
+		ocf_mngt_mf_monitor_stop();
+
+		RETURN_CMD_RESULT(cmd_info, arg, 0);
+	}
+	/*========== [Orthus FLAG END] ==========*/
+
 	default:
+		printk(KERN_ALERT "DEBUG: cmd code = %u\n", cmd);
 		return -EINVAL;
 	}
 }

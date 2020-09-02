@@ -331,6 +331,17 @@ int handle_start()
 		return FAILURE;
 	}
 
+	/*========== [Orthus FLAG BEGIN] ==========*/
+	if (command_args_values.cache_mode == ocf_cache_mode_mfwa
+		|| command_args_values.cache_mode == ocf_cache_mode_mfwb
+		|| command_args_values.cache_mode == ocf_cache_mode_mfwt) {
+		cas_printf(LOG_ERR, "Do not start cache in a multi-factor mode\n"
+			                "Instead, start in default mode and then set mode to a"
+			                " multi-factor mode\n");
+		return FAILURE;
+	}
+	/*========== [Orthus FLAG END] ==========*/
+
 	status = start_cache(command_args_values.cache_id,
 			command_args_values.state,
 			command_args_values.cache_device,
@@ -1066,6 +1077,17 @@ int set_cache_mode_command_handle_option(char *opt, const char **arg)
 
 int handle_set_cache_mode()
 {
+	/*========== [Orthus FLAG BEGIN] ==========*/
+	if (command_args_values.cache_mode == ocf_cache_mode_mfwa
+		|| command_args_values.cache_mode == ocf_cache_mode_mfwb
+		|| command_args_values.cache_mode == ocf_cache_mode_mfwt) {
+		cas_printf(LOG_INFO, "You are switching to a multi-factor mode. Please be sure"
+			                 " that a monitor thread has been started, otherwise this"
+			                 " mode functions exactly the same as its non-mf counterpart\n"
+			                 "See `casadm -M --help` for more info\n");
+	}
+	/*========== [Orthus FLAG END] ==========*/
+
 	return set_cache_mode(command_args_values.cache_mode,
 			command_args_values.cache_id,
 			command_args_values.cache_state_flush);
@@ -1762,6 +1784,41 @@ static int handle_version(void)
 	return SUCCESS;
 }
 
+/*========== [Orthus FLAG BEGIN] ==========*/
+static cli_option mf_monitor_start_options[] = {
+	{'i', "cache-id", CACHE_ID_DESC, 1, "ID", CLI_OPTION_REQUIRED},
+	{'j', "core-id", CORE_ID_DESC, 1, "ID", CLI_OPTION_REQUIRED},
+	{0}
+};
+
+static int handle_mf_monitor_start(void)
+{
+	int ret;
+
+	ret = mf_monitor_start(command_args_values.cache_id, command_args_values.core_id);
+	if (ret)
+		return FAILURE;
+
+	cas_printf(LOG_INFO, "Started multi-factor monitor thread on cache %d - core %d\n",
+		                 command_args_values.cache_id, command_args_values.core_id);
+
+	return SUCCESS;
+}
+
+static int handle_mf_monitor_stop(void)
+{
+	int ret;
+
+	ret = mf_monitor_stop();
+	if (ret)
+		return FAILURE;
+
+	cas_printf(LOG_INFO, "Stopeed the running multi-factor monitor thread\n");
+
+	return SUCCESS;
+}
+/*========== [Orthus FLAG END] ==========*/
+
 /* Print help for IO class command */
 void io_class_help(app *app_values, cli_command *cmd)
 {
@@ -2032,6 +2089,30 @@ static cli_command cas_commands[] = {
 			.flags = 0,
 			.help = NULL
 		},
+		/*========== [Orthus FLAG BEGIN] ==========*/
+		{
+			.name = "mf-monitor-start",
+			.short_name = 'M',
+			.desc = "Start a multi-factor caching monitor",
+			.long_desc = NULL,
+			.options = mf_monitor_start_options,
+			.command_handle_opts = command_handle_option,
+			.flags = CLI_SU_REQUIRED,
+			.handle = handle_mf_monitor_start,
+			.help = NULL
+		},
+		{
+			.name = "mf-monitor-stop",
+			.short_name = 'N',
+			.desc = "Stop the running multi-factor caching monitor",
+			.long_desc = NULL,
+			.options = NULL,
+			.command_handle_opts = NULL,
+			.flags = CLI_SU_REQUIRED,
+			.handle = handle_mf_monitor_stop,
+			.help = NULL
+		},
+		/*========== [Orthus FLAG END] ==========*/
 		{
 			.name = "help",
 			.short_name = 'H',

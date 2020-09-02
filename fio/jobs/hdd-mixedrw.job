@@ -1,0 +1,13 @@
+[hdd-mixedrw]
+rw=randrw
+rwmixread=95
+ioengine=libaio
+bs=4k
+direct=1
+size=1G
+numjobs=8
+iodepth=16
+time_based
+runtime=240
+directory=/mnt/hdd
+group_reporting

@@ -1424,6 +1424,29 @@ static void _cache_mngt_remove_core_complete(void *priv, int error)
 	complete(&context->cmpl);
 }
 
+/*========== [Orthus FLAG BEGIN] ==========*/
+int cache_mngt_mf_monitor_start(struct kcas_mf_monitor_start *cmd)
+{
+	int result;
+	ocf_cache_t cache;
+	ocf_core_t core;
+
+	result = mngt_get_cache_by_id(cas_ctx, cmd->cache_id, &cache);
+	if (result)
+		return result;
+
+	result = get_core_by_id(cache, cmd->core_id, &core);
+	if (result < 0)
+		return result;
+
+	result = ocf_mngt_mf_monitor_start(core);
+	if (result)
+		return result;
+
+	return 0;
+}
+/*========== [Orthus FLAG END] ==========*/
+
 int cache_mngt_remove_core_from_cache(struct kcas_remove_core *cmd)
 {
 	struct _cache_mngt_sync_context context;

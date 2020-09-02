@@ -34,6 +34,10 @@ int cache_mngt_add_core_to_cache(const char *cache_name, size_t name_len,
 		struct ocf_mngt_core_config *cfg,
 		struct kcas_insert_core *cmd_info);
 
+/*========== [Orthus FLAG BEGIN] ==========*/
+int cache_mngt_mf_monitor_start(struct kcas_mf_monitor_start *cmd);
+/*========== [Orthus FLAG END] ==========*/
+
 int cache_mngt_remove_core_from_cache(struct kcas_remove_core *cmd);
 
 int cache_mngt_reset_stats(const char *cache_name, size_t cache_name_len,

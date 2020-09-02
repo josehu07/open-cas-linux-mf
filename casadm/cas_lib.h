@@ -127,15 +127,27 @@ int start_cache(uint16_t cache_id, unsigned int cache_init,
 int stop_cache(uint16_t cache_id, int flush);
 
 #ifdef WI_AVAILABLE
-#define CAS_CLI_HELP_START_CACHE_MODES "wt|wb|wa|pt|wi|wo"
-#define CAS_CLI_HELP_SET_CACHE_MODES "wt|wb|wa|pt|wi|wo"
-#define CAS_CLI_HELP_SET_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Invalidate, Write-Only"
-#define CAS_CLI_HELP_START_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Invalidate, Write-Only"
+/*========== [Orthus FLAG BEGIN] ==========*/
+// #define CAS_CLI_HELP_START_CACHE_MODES "wt|wb|wa|pt|wi|wo"
+// #define CAS_CLI_HELP_SET_CACHE_MODES "wt|wb|wa|pt|wi|wo"
+// #define CAS_CLI_HELP_START_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Invalidate, Write-Only"
+// #define CAS_CLI_HELP_SET_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Invalidate, Write-Only"
+#define CAS_CLI_HELP_START_CACHE_MODES "wt|wb|wa|pt|wi|wo|mfwa|mfwb|mfwt"
+#define CAS_CLI_HELP_SET_CACHE_MODES "wt|wb|wa|pt|wi|wo|mfwa|mfwb|mfwt"
+#define CAS_CLI_HELP_START_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Invalidate, Write-Only, Multi-Factor Write-Around, Multi-Factor Write-Back, Multi-Factor Write-Through"
+#define CAS_CLI_HELP_SET_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Invalidate, Write-Only, Multi-Factor Write-Around, Multi-Factor Write-Back, Multi-Factor Write-Through"
+/*========== [Orthus FLAG END] ==========*/
 #else
-#define CAS_CLI_HELP_START_CACHE_MODES "wt|wb|wa|pt|wo"
-#define CAS_CLI_HELP_SET_CACHE_MODES "wt|wb|wa|pt|wo"
-#define CAS_CLI_HELP_START_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Only"
-#define CAS_CLI_HELP_SET_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Only"
+/*========== [Orthus FLAG BEGIN] ==========*/
+// #define CAS_CLI_HELP_START_CACHE_MODES "wt|wb|wa|pt|wo"
+// #define CAS_CLI_HELP_SET_CACHE_MODES "wt|wb|wa|pt|wo"
+// #define CAS_CLI_HELP_START_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Only"
+// #define CAS_CLI_HELP_SET_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Only"
+#define CAS_CLI_HELP_START_CACHE_MODES "wt|wb|wa|pt|wo|mfwa|mfwb|mfwt"
+#define CAS_CLI_HELP_SET_CACHE_MODES "wt|wb|wa|pt|wo|mfwa|mfwb|mfwt"
+#define CAS_CLI_HELP_START_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Only, Multi-Factor Write-Around, Multi-Factor Write-Back, Multi-Factor Write-Through"
+#define CAS_CLI_HELP_SET_CACHE_MODES_FULL "Write-Through, Write-Back, Write-Around, Pass-Through, Write-Only, Multi-Factor Write-Around, Multi-Factor Write-Back, Multi-Factor Write-Through"
+/*========== [Orthus FLAG END] ==========*/
 #endif
 
 /**
@@ -211,6 +223,11 @@ int set_cache_mode(unsigned int cache_state, unsigned int cache_id, int flush);
 int add_core(unsigned int cache_id, unsigned int core_id, const char *core_device, int try_add, int update_path);
 
 int get_core_info(int fd, int cache_id, int core_id, struct kcas_core_info *info);
+
+/*========== [Orthus FLAG BEGIN] ==========*/
+int mf_monitor_start(uint16_t cache_id, uint16_t core_id);
+int mf_monitor_stop(void);
+/*========== [Orthus FLAG END] ==========*/
 
 int remove_core(unsigned int cache_id, unsigned int core_id,
 		bool detach, bool force_no_flush);

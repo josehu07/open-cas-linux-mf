@@ -254,6 +254,11 @@ static struct name_to_val_mapping cache_mode_names[] = {
 	{ .short_name = "wi", .long_name = "Write-Invalidate", .value = ocf_cache_mode_wi },
 #endif
 	{ .short_name = "wo", .long_name = "Write-Only", .value = ocf_cache_mode_wo },
+	/*========== [Orthus FLAG BEGIN] ==========*/
+	{ .short_name = "mfwa", .long_name = "Multi-Factor Write-Around", .value = ocf_cache_mode_mfwa },
+	{ .short_name = "mfwb", .long_name = "Multi-Factor Write-Back", .value = ocf_cache_mode_mfwb },
+	{ .short_name = "mfwt", .long_name = "Multi-Factor Write-Through", .value = ocf_cache_mode_mfwt },
+	/*========== [Orthus FLAG END] ==========*/
 	{ NULL }
 };
 
@@ -1848,6 +1853,77 @@ int check_if_mounted(int cache_id, int core_id)
 	return SUCCESS;
 
 }
+
+/*========== [Orthus FLAG BEGIN] ==========*/
+int mf_monitor_start(uint16_t cache_id, uint16_t core_id)
+{
+	int fd = 0, ioctl_ret;
+	struct kcas_mf_monitor_start cmd;
+
+	fd = open_ctrl_device();
+	if (fd == -1)
+		return FAILURE;
+
+	memset(&cmd, 0, sizeof(cmd));
+	cmd.cache_id = cache_id;
+	cmd.core_id = core_id;
+
+	ioctl_ret = ioctl(fd, KCAS_IOCTL_MF_MONITOR_START, &cmd);
+	if (ioctl_ret < 0) {
+		int errsv = errno;
+
+		close(fd);
+
+		switch (cmd.ext_err_code) {
+		case MF_MONITOR_START_ERR_CACHE_STAT:
+			cas_printf(LOG_ERR, "ERROR: Unable to open cache stat sysfile\n");
+			return FAILURE;
+		case MF_MONITOR_START_ERR_CORE_STAT:
+			cas_printf(LOG_ERR, "ERROR: Unable to open core stat sysfile\n");
+			return FAILURE;
+		case MF_MONITOR_START_ERR_THREAD_RUN:
+			cas_printf(LOG_ERR, "ERROR: Failed to run monitor kernel thread\n");
+			return FAILURE;
+		default:
+			cas_printf(LOG_ERR, "ERROR: error %d %d %d when starting. Make sure"
+				                " that the cache is running and the core is added\n",
+				       ioctl_ret, errsv, cmd.ext_err_code);
+			return FAILURE;
+		}
+	}
+
+	close(fd);
+
+	return SUCCESS;
+}
+
+int mf_monitor_stop(void)
+{
+	int fd = 0, ioctl_ret;
+	struct kcas_mf_monitor_stop cmd;
+
+	fd = open_ctrl_device();
+	if (fd == -1)
+		return FAILURE;
+
+	memset(&cmd, 0, sizeof(cmd));
+
+	ioctl_ret = ioctl(fd, KCAS_IOCTL_MF_MONITOR_STOP, &cmd);
+	if (ioctl_ret < 0) {
+		int errsv = errno;
+
+		close(fd);
+		cas_printf(LOG_ERR, "ERROR: error %d %d %d when stoping. Perhaps there"
+			                " is no monitor thread running\n",
+			       ioctl_ret, errsv, cmd.ext_err_code);
+		return FAILURE;
+	}
+
+	close(fd);
+
+	return SUCCESS;
+}
+/*========== [Orthus FLAG END] ==========*/
 
 int remove_core(unsigned int cache_id, unsigned int core_id,
 		bool detach, bool force_no_flush)
