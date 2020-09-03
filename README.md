@@ -38,7 +38,7 @@ ocf/
  |- ...
 ```
 
-Everything I have added/modified are marked by [Orthus FLAG BEGIN] and [Orthus FLAG END] for easier future reference.
+Everything I have added/modified are marked by `[Orthus FLAG BEGIN]` and `[Orthus FLAG END]` for easier future reference.
 
 
 ## Usage
@@ -96,6 +96,40 @@ $ sudo casadm -A -d /dev/yyy -i 1       # Add a core device to cache 1
 $ sudo casadm -L                        # List current CAS status
 ```
 
+Take a look at `open-cas-linux-mf/ocf/src/engine/mf_monitor.c`. Edit monitor parameters and block device stat file path according to your setup.
+
+```C
+/** Enable kernel verbose logging? */
+static const bool MONITOR_VERBOSE_LOG = true;
+
+
+/** For block device throughput measurement. */
+static const char *CACHE_STAT_FILENAME = "/sys/block/sdc/stat";
+static const char *CORE_STAT_FILENAME  = "/sys/block/sdb/stat";
+
+
+/** Do not attempt tuning when miss ratio is higher than X. */
+static const int MISS_RATIO_TUNING_BOUND = 2000;    // 20%.
+
+/** Consider cache is stable if miss ratio within OLD_RATIO +- X. */
+static const int WAIT_STABLE_THRESHOLD = 10;        // 0.1%.
+
+/** Sleep X microseconds when detecting cache stability. */
+static const int WAIT_STABLE_SLEEP_INTERVAL_US = 1000000;
+
+/** Consider workload change when miss ratio > BASE_RATIO + X. */
+static const int WORKLOAD_CHANGE_THRESHOLD = 2000;  // 20%.
+
+/** `load_admit` tuning step size. */
+static const int LOAD_ADMIT_TUNING_STEP = 100;      // 1%.
+
+/** Measure throughput for a `load_admit` value for X microseconds. */
+static const int MEASURE_THROUGHPUT_INTERVAL_US = 5000;
+
+/** How many chances given to not quit on `load_admit` 100%. */
+static const int NOT_QUIT_ON_100_CHANCES = 10;
+```
+
 Then, start the monitor and switch the cache to a multi-factor cache mode, for example `mfwa`:
 
 ```bash
@@ -141,6 +175,8 @@ Make sure that no cache is now running:
 ```bash
 $ sudo casadm -L
 ```
+
+> You will find the scripts under `open-cas-linux-mf/scripts` useful. Make sure to check their contents and set correct block device pathes on your system. They are almost certainly different from what's on my node.
 
 
 ## Original README

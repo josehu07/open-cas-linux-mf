@@ -1,5 +1,5 @@
-DEV_CORE=/dev/disk/by-id/wwn-0x5000c5007de2030f                         # /dev/sdb
-DEV_CACHE=/dev/disk/by-id/ata-INTEL_SSDSC2BB480G4_PHWL444303SP480QGN    # /dev/sdc
+DEV_CORE=/dev/disk/by-id/wwn-0x5000c5008e929b87                         # /dev/sdb
+DEV_CACHE=/dev/disk/by-id/ata-INTEL_SSDSC2BB480G4_PHWL444303FK480QGN    # /dev/sdc
 
 # Format core device as EXT4 file system.
 echo "\nFormatting core device...\n"

@@ -1,4 +1,4 @@
-DEV_CORE=/dev/disk/by-id/ata-INTEL_SSDSC2BB480G4_PHWL444303SP480QGN     # /dev/sdc
+DEV_CORE=/dev/disk/by-id/ata-INTEL_SSDSC2BB480G4_PHWL444303FK480QGN     # /dev/sdc
 DEV_CACHE=/dev/loop0                                                    # Ramdisk block
 
 # Format core device as EXT4 file system.

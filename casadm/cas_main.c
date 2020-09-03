@@ -1813,7 +1813,7 @@ static int handle_mf_monitor_stop(void)
 	if (ret)
 		return FAILURE;
 
-	cas_printf(LOG_INFO, "Stopeed the running multi-factor monitor thread\n");
+	cas_printf(LOG_INFO, "Stoped the running multi-factor monitor thread (if any)\n");
 
 	return SUCCESS;
 }
