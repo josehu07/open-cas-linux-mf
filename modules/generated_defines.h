@@ -1,10 +1,10 @@
 #define cas_blk_rq_append_bio(rq, bounce_bio) \
             blk_rq_append_bio(rq, &bounce_bio)
 #define CAS_LOOKUP_BDEV(PATH) \
-            lookup_bdev(PATH, 0)
+            lookup_bdev(PATH)
 static inline struct bio *cas_bio_clone(struct bio *bio, gfp_t gfp_mask)
             {
-                return bio_clone_kmalloc(bio, gfp_mask);
+                return bio_clone_fast(bio, gfp_mask, NULL);
             }
 #define CAS_BIO_SET_DEV(bio, bdev) \
             bio_set_dev(bio, bdev)
@@ -93,7 +93,7 @@ static inline struct bio *cas_bio_clone(struct bio *bio, gfp_t gfp_mask)
 #define CAS_SET_QUEUE_CHUNK_SECTORS(queue, chunk_size) \
 			queue->limits.chunk_sectors = chunk_size
 #define CAS_QUEUE_FLAG_SET(flag, request_queue) \
-			queue_flag_set(flag, request_queue)
+			blk_queue_flag_set(flag, request_queue)
 
 	static inline void cas_copy_queue_limits(struct request_queue *exp_q,
 			struct request_queue *cache_q, struct request_queue *core_q)
@@ -105,8 +105,8 @@ static inline struct bio *cas_bio_clone(struct bio *bio, gfp_t gfp_mask)
 		exp_q->limits.max_write_same_sectors = 0;
 		exp_q->limits.max_write_zeroes_sectors = 0;
 	}
-#define CAS_QUEUE_SPIN_LOCK(q) spin_lock_irq(q->queue_lock)
-#define CAS_QUEUE_SPIN_UNLOCK(q) spin_unlock_irq(q->queue_lock)
+#define CAS_QUEUE_SPIN_LOCK(q) spin_lock_irq(&q->queue_lock)
+#define CAS_QUEUE_SPIN_UNLOCK(q) spin_unlock_irq(&q->queue_lock)
 
 	static inline int cas_is_rq_type_fs(struct request *rq)
 	{

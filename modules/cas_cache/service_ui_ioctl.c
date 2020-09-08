@@ -13,7 +13,7 @@
 	if (copy_from_user(cmd_info, (void __user *)arg, size)) { \
 		printk(KERN_ALERT "Cannot copy cmd info from user space\n"); \
 		vfree(cmd_info); \
-		return -EINVAL; \
+		return -97; \
 	} \
 })
 
@@ -39,7 +39,8 @@ long cas_service_ioctl_ctrl(struct file *filp, unsigned int cmd,
 	int retval = 0;
 
 	if (_IOC_TYPE(cmd) != KCAS_IOCTL_MAGIC)
-		return -EINVAL;
+		//return -EINVAL;
+		return -98;
 
 	if (!capable(CAP_SYS_ADMIN)) {
 		/* Must be root to issue ioctls */
@@ -413,6 +414,7 @@ long cas_service_ioctl_ctrl(struct file *filp, unsigned int cmd,
 
 	default:
 		printk(KERN_ALERT "DEBUG: cmd code = %u\n", cmd);
-		return -EINVAL;
+		//return -EINVAL;
+		return -99;
 	}
 }
