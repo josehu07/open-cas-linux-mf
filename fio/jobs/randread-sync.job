@@ -1,4 +1,4 @@
-[cas-randread]
+[cas-randread-sync]
 rw=randread
 ioengine=sync
 fdatasync=1

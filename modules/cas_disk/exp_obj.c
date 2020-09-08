@@ -72,6 +72,7 @@ static inline void _casdsk_exp_obj_handle_bio_att(struct casdsk_disk *dsk,
 {
 	int status = CASDSK_BIO_NOT_HANDLED;
 
+	/** Bypass fast path for multi-factor caching purpose... */
 	/*========== [Orthus FLAG BEGIN] ==========*/
 	// if (likely(dsk->exp_obj->ops->make_request_fn))
 	// 	status = dsk->exp_obj->ops->
