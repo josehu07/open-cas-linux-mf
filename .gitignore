@@ -19,3 +19,5 @@ modules/include/ocf/
 modules/.cache.mk
 modules/.tmp_versions/
 modules/**/*.o.cmd
+
+casadm/casadm
