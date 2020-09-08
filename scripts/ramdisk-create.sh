@@ -1,9 +1,3 @@
-# Create a ramdisk of 16GiB at /dev/loop0.
-sudo mkdir /ramdisk
-sudo mount -t tmpfs tmpfs /ramdisk
-sudo dd if=/dev/zero of=/ramdisk/loopfile bs=1G count=16
-sudo losetup /dev/loop0 /ramdisk/loopfile
-
-# Format the ramdisk block device as EXT4.
-sudo mkfs.ext4 /dev/loop0
+# Create a ramdisk of 8GiB at /dev/ram0.
+sudo modprobe brd rd_nr=1 rd_size=$((8 * 1048576))
 

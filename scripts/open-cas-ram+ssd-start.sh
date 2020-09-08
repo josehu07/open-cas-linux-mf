@@ -1,5 +1,5 @@
-DEV_CORE=/dev/disk/by-id/ata-INTEL_SSDSC2BB480G4_PHWL444303FK480QGN     # /dev/sdc
-DEV_CACHE=/dev/loop0                                                    # Ramdisk block
+DEV_CORE=/dev/sdc1
+DEV_CACHE=/dev/ram0
 
 # Format core device as EXT4 file system.
 echo "\nFormatting core device...\n"
@@ -7,7 +7,7 @@ echo "\nFormatting core device...\n"
 
 # Setup SSD device as CAS cache ID #1, using WT mode.
 echo "\nStarting SSD as cache device #1, mode = wt...\n"
-sudo casadm -S -i 1 -d ${DEV_CACHE} -c wt -f
+sudo casadm -S -i 1 -d ${DEV_CACHE} -c wt -x 64 -f
 
 # Attach HDD device to cache #1.
 echo "\nAttaching HDD device to cache #1...\n"

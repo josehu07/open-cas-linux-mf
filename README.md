@@ -57,7 +57,11 @@ $ git submodule update --init --update
 
 ### Install Open-CAS-Linux
 
-Make sure you have full Linux kernel headers installed.
+Make sure you have full **Linux kernel headers installed**.
+
+```bash
+$ sudo apt-get install linux-headers-$(uname -r)
+```
 
 At the top-level folder, compile by:
 
