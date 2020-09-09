@@ -1,0 +1,1 @@
+{"type": "randread_optane_ssd_flash_80_hit", "qd": 5, "script": "./run_with_mf.sh mfwa"}

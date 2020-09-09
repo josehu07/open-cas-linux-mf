@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [[ $# -ne 2 ]]; then
+    echo "Please provide two arguments: the mf cache mode, the fio job file"
+    exit 1
+fi
+
+if [[ $1 -ne mfwa ]] && [[ $1 -ne mfwb ]] && [[ $1 -ne mfwt ]]; then
+    echo "Unrecognized mf cache mode: $1"
+    exit 2
+fi
+
+casadm -N
+casadm -T -i 1
+
+
+casadm -S -d /dev/nvme1n1p1 -x 64  --force
+casadm -A -d /dev/nvme0n1 -i 1
+casadm -X -n seq-cutoff -i 1  -p never
+
+
+
+sudo casadm -M -i 1 -j 1
+sudo casadm -Q -i 1 -c $1 
+
+
+fio $2
+
+dmesg --clear
