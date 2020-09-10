@@ -64,10 +64,12 @@ void *eachThread(void *vargp)
 	}
 	//std::cout << "to issue IO " << pos/4096 << std::endl;
         struct iocb * p = (struct iocb *)malloc(sizeof(struct iocb));
-            //io_prep_pread(p, fd_[item.fd], item.buffer, item.length, item.offset);
-        io_prep_pread(p, fd, read_buf, STRIDE_SIZE, pos);
-        //p->data = (void *) item.io_status; 
-        p->data = (void *) read_buf;
+        if (rand() % 100 >= D) {
+	    io_prep_pread(p, fd, read_buf, STRIDE_SIZE, pos);
+	} else {
+	    io_prep_pwrite(p, fd, read_buf, STRIDE_SIZE, pos);
+	}
+	p->data = (void *) read_buf;
 
         if (io_submit(ctx_, 1, &p) != 1) {
             io_destroy(ctx_);
@@ -85,7 +87,7 @@ void generate_read_trace(char type) {
 	 std::cout << "To read randomly" << std::endl;
          srand(time(0));
 	 for (int i = 0; i < num_ios; i++)
-             read_order.push_back((long)((rand() %(1*1024*1024*2/d)))*STRIDE_SIZE);
+             read_order.push_back((long)((rand() %(1*1024*1024*2/d)))*STRIDE_SIZE);   //1 GB working set 
      } else if (type == 's') {
 	 std::cout << "To read sequentially with offset " << D << std::endl;
          for (int i = 0; i < num_ios; i++) {
@@ -154,7 +156,7 @@ int main(int argc, char* * argv) {
          printf("Wrong parameters: multi_thread_aio dev_name D(offset to jump, in unit of sector) j(num_parallel_jobs to submit IO) d(stride/io_size in sector) read_type(random/seq/jump) queue_depth\n");
          return 1;
      }
-     D = atoi(argv[2]);    //offset between two reads, in unit of sector
+     D = atoi(argv[2]);    //write ratio
      j = atoi(argv[3]);
      d = atoi(argv[4]);        // request size
      STRIDE_SIZE = SECTOR_SIZE * d;
@@ -163,10 +165,10 @@ int main(int argc, char* * argv) {
      pattern = atoi(argv[6])/16;
      job_queue.set_max(max_qd);
 
-     printf("To run with:\n    jump: %d, num_jobs: %d, stride: %d, device_name: %s, write_order: %s, max_qd: %d\n", D, j, d, argv[1], argv[5], max_qd);
+     printf("To run with:\n    jump: %d, num_jobs: %d, write ratio: %d, device_name: %s, access_pattern: %s, max_qd: %d\n", D, j, d, argv[1], argv[5], max_qd);
 
      // open raw block device
-     fd = open(argv[1], O_RDONLY | O_DIRECT);      // O_DIRECT
+     fd = open(argv[1], O_RDWR | O_DIRECT);      // O_DIRECT
      if (fd < 0) {
          printf("Raw Device Open failed\n");
          return 1;
