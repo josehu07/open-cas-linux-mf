@@ -1,0 +1,1 @@
+{"type": "randread_nvdimm_80_hit", "qd": 8, "script": "./run_with_mf.sh mfwa"}

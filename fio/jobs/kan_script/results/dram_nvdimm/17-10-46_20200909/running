@@ -1,0 +1,35 @@
+Stoped the running multi-factor monitor thread (if any)
+Successfully added cache instance 1
+Successfully added core 1 to cache instance 1
+file1: (g=0): rw=randread, bs=(R) 64.0KiB-64.0KiB, (W) 64.0KiB-64.0KiB, (T) 64.0KiB-64.0KiB, ioengine=libaio, iodepth=1
+...
+file2: (g=0): rw=randread, bs=(R) 64.0KiB-64.0KiB, (W) 64.0KiB-64.0KiB, (T) 64.0KiB-64.0KiB, ioengine=libaio, iodepth=1
+...
+fio-3.14-11-g308a
+Starting 12 threads
+
+file1: (groupid=0, jobs=12): err= 0: pid=21025: Wed Sep  9 17:11:35 2020
+  read: IOPS=211k, BW=12.9GiB/s (13.9GB/s)(387GiB/30002msec)
+    slat (usec): min=4, max=1666, avg=55.49, stdev=19.70
+    clat (nsec): min=320, max=436015, avg=492.07, stdev=2380.01
+     lat (usec): min=16, max=1667, avg=56.14, stdev=19.82
+    clat percentiles (nsec):
+     | 25.0th=[  390], 50.0th=[  410], 75.0th=[  450], 99.0th=[ 1304]
+   bw (  MiB/s): min=11657, max=14043, per=99.97%, avg=13206.99, stdev=37.88, samples=709
+   iops        : min=186526, max=224687, avg=211311.63, stdev=606.11, samples=709
+  lat (nsec)   : 500=85.95%, 750=10.01%, 1000=1.88%
+  lat (usec)   : 2=1.93%, 4=0.16%, 10=0.03%, 20=0.01%, 50=0.01%
+  lat (usec)   : 100=0.01%, 250=0.02%, 500=0.01%
+  cpu          : usr=2.08%, sys=13.64%, ctx=6343633, majf=0, minf=0
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=6341658,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+   READ: bw=12.9GiB/s (13.9GB/s), 12.9GiB/s-12.9GiB/s (13.9GB/s-13.9GB/s), io=387GiB (416GB), run=30002-30002msec
+
+Disk stats (read/write):
+    cas1-1: ios=8438786/0, merge=0/0, ticks=394960/0, in_queue=0, util=99.79%, aggrios=0/0, aggrmerge=0/0, aggrticks=0/0, aggrin_queue=0, aggrutil=0.00%
+  pmem0: ios=0/0, merge=0/0, ticks=0/0, in_queue=0, util=0.00%

@@ -1,0 +1,33 @@
+Stoped the running multi-factor monitor thread (if any)
+Successfully added cache instance 1
+Successfully added core 1 to cache instance 1
+file1: (g=0): rw=randread, bs=(R) 64.0KiB-64.0KiB, (W) 64.0KiB-64.0KiB, (T) 64.0KiB-64.0KiB, ioengine=libaio, iodepth=1
+...
+fio-3.14-11-g308a
+Starting 16 threads
+
+file1: (groupid=0, jobs=16): err= 0: pid=5822: Wed Sep  9 16:22:38 2020
+  read: IOPS=104k, BW=6471MiB/s (6785MB/s)(190GiB/30002msec)
+    slat (usec): min=4, max=151, avg=10.40, stdev= 2.27
+    clat (usec): min=17, max=3179, avg=142.57, stdev=24.38
+     lat (usec): min=25, max=3188, avg=153.15, stdev=24.58
+    clat percentiles (usec):
+     | 25.0th=[  131], 50.0th=[  139], 75.0th=[  149], 99.0th=[  265]
+   bw (  MiB/s): min= 6413, max= 6549, per=100.00%, avg=6470.45, stdev= 1.70, samples=946
+   iops        : min=102624, max=104796, avg=103527.14, stdev=27.18, samples=946
+  lat (usec)   : 20=0.01%, 50=0.24%, 100=0.30%, 250=97.76%, 500=1.70%
+  lat (usec)   : 750=0.01%
+  lat (msec)   : 4=0.01%
+  cpu          : usr=2.29%, sys=9.56%, ctx=3106101, majf=0, minf=0
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=3106078,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+   READ: bw=6471MiB/s (6785MB/s), 6471MiB/s-6471MiB/s (6785MB/s-6785MB/s), io=190GiB (204GB), run=30002-30002msec
+
+Disk stats (read/write):
+    cas1-1: ios=4071687/0, merge=0/0, ticks=597049/0, in_queue=2499, util=99.79%, aggrios=16760/0, aggrmerge=0/0, aggrticks=1376/0, aggrin_queue=0, aggrutil=3.54%
+  nvme1n1: ios=16760/0, merge=0/0, ticks=1376/0, in_queue=0, util=3.54%

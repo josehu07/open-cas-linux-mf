@@ -1,0 +1,33 @@
+Stoped the running multi-factor monitor thread (if any)
+Successfully added cache instance 1
+Successfully added core 1 to cache instance 1
+Started multi-factor monitor thread on cache 1 - core 1
+You are switching to a multi-factor mode. Please be sure that a monitor thread has been started, otherwise this mode functions exactly the same as its non-mf counterpart
+See `casadm -M --help` for more info
+file1: (g=0): rw=randread, bs=(R) 64.0KiB-64.0KiB, (W) 64.0KiB-64.0KiB, (T) 64.0KiB-64.0KiB, ioengine=libaio, iodepth=5
+fio-3.14-11-g308a
+Starting 1 thread
+
+file1: (groupid=0, jobs=1): err= 0: pid=3752: Tue Sep  8 23:17:40 2020
+  read: IOPS=52.2k, BW=3260MiB/s (3418MB/s)(31.8GiB/10001msec)
+    slat (usec): min=7, max=152, avg=10.46, stdev= 3.63
+    clat (usec): min=13, max=310, avg=84.47, stdev=35.94
+     lat (usec): min=38, max=319, avg=95.06, stdev=36.06
+    clat percentiles (usec):
+     | 25.0th=[   53], 50.0th=[   84], 75.0th=[  109], 99.0th=[  180]
+   bw (  MiB/s): min= 3236, max= 3277, per=99.99%, avg=3259.61, stdev=12.84, samples=19
+   iops        : min=51780, max=52444, avg=52153.68, stdev=205.44, samples=19
+  lat (usec)   : 20=0.01%, 50=21.89%, 100=45.22%, 250=32.87%, 500=0.02%
+  cpu          : usr=8.12%, sys=33.62%, ctx=779751, majf=0, minf=0
+  IO depths    : 1=0.0%, 2=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=521662,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=5
+
+Run status group 0 (all jobs):
+   READ: bw=3260MiB/s (3418MB/s), 3260MiB/s-3260MiB/s (3418MB/s-3418MB/s), io=31.8GiB (34.2GB), run=10001-10001msec
+
+Disk stats (read/write):
+    cas1-1: ios=915679/0, merge=0/0, ticks=90286/0, in_queue=65, util=98.51%, aggrios=325920/0, aggrmerge=0/0, aggrticks=34661/0, aggrin_queue=65, aggrutil=98.39%
+  nvme0n1: ios=325920/0, merge=0/0, ticks=34661/0, in_queue=65, util=98.39%

@@ -1,0 +1,36 @@
+Stoped the running multi-factor monitor thread (if any)
+Successfully added cache instance 1
+Successfully added core 1 to cache instance 1
+Started multi-factor monitor thread on cache 1 - core 1
+You are switching to a multi-factor mode. Please be sure that a monitor thread has been started, otherwise this mode functions exactly the same as its non-mf counterpart
+See `casadm -M --help` for more info
+file1: (g=0): rw=randread, bs=(R) 64.0KiB-64.0KiB, (W) 64.0KiB-64.0KiB, (T) 64.0KiB-64.0KiB, ioengine=libaio, iodepth=1
+...
+fio-3.14-11-g308a
+Starting 8 threads
+
+file1: (groupid=0, jobs=8): err= 0: pid=16317: Wed Sep  9 17:01:31 2020
+  read: IOPS=258k, BW=15.8GiB/s (16.9GB/s)(473GiB/30001msec)
+    slat (usec): min=11, max=247, avg=30.04, stdev= 5.57
+    clat (nsec): min=324, max=121989, avg=394.42, stdev=240.88
+     lat (usec): min=15, max=247, avg=30.53, stdev= 5.61
+    clat percentiles (nsec):
+     | 25.0th=[  366], 50.0th=[  382], 75.0th=[  394], 99.0th=[  502]
+   bw (  MiB/s): min=16006, max=16284, per=100.00%, avg=16135.65, stdev= 6.94, samples=472
+   iops        : min=256094, max=260548, avg=258170.44, stdev=111.08, samples=472
+  lat (nsec)   : 500=98.95%, 750=0.78%, 1000=0.14%
+  lat (usec)   : 2=0.06%, 4=0.05%, 10=0.01%, 20=0.02%, 50=0.01%
+  lat (usec)   : 100=0.01%, 250=0.01%
+  cpu          : usr=2.89%, sys=20.33%, ctx=7745597, majf=0, minf=0
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=7745178,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+   READ: bw=15.8GiB/s (16.9GB/s), 15.8GiB/s-15.8GiB/s (16.9GB/s-16.9GB/s), io=473GiB (508GB), run=30001-30001msec
+
+Disk stats (read/write):
+    cas1-1: ios=10325196/0, merge=0/0, ticks=253502/0, in_queue=0, util=99.46%, aggrios=0/0, aggrmerge=0/0, aggrticks=0/0, aggrin_queue=0, aggrutil=0.00%
+  pmem0: ios=0/0, merge=0/0, ticks=0/0, in_queue=0, util=0.00%

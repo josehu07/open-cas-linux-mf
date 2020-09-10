@@ -1,0 +1,39 @@
+Stoped the running multi-factor monitor thread (if any)
+Successfully added cache instance 1
+Successfully added core 1 to cache instance 1
+Started multi-factor monitor thread on cache 1 - core 1
+You are switching to a multi-factor mode. Please be sure that a monitor thread has been started, otherwise this mode functions exactly the same as its non-mf counterpart
+See `casadm -M --help` for more info
+file1: (g=0): rw=randread, bs=(R) 64.0KiB-64.0KiB, (W) 64.0KiB-64.0KiB, (T) 64.0KiB-64.0KiB, ioengine=libaio, iodepth=1
+...
+file2: (g=0): rw=randread, bs=(R) 64.0KiB-64.0KiB, (W) 64.0KiB-64.0KiB, (T) 64.0KiB-64.0KiB, ioengine=libaio, iodepth=1
+...
+fio-3.14-11-g308a
+Starting 16 threads
+
+file1: (groupid=0, jobs=16): err= 0: pid=1973: Wed Sep  9 16:06:58 2020
+  read: IOPS=91.4k, BW=5710MiB/s (5988MB/s)(167GiB/30002msec)
+    slat (usec): min=3, max=2357, avg=100.96, stdev=88.58
+    clat (nsec): min=273, max=3188.4k, avg=72742.45, stdev=135621.02
+     lat (usec): min=16, max=3197, avg=173.91, stdev=121.80
+    clat percentiles (nsec):
+     | 25.0th=[   386], 50.0th=[   466], 75.0th=[108032], 99.0th=[544768]
+   bw (  MiB/s): min= 3171, max= 8787, per=100.00%, avg=5715.66, stdev=124.32, samples=949
+   iops        : min=50750, max=140596, avg=91450.25, stdev=1989.06, samples=949
+  lat (nsec)   : 500=55.16%, 750=12.17%, 1000=1.68%
+  lat (usec)   : 2=1.62%, 4=0.88%, 10=0.24%, 20=0.04%, 50=0.68%
+  lat (usec)   : 100=1.66%, 250=10.48%, 500=14.26%, 750=0.70%, 1000=0.37%
+  lat (msec)   : 2=0.07%, 4=0.01%
+  cpu          : usr=1.05%, sys=5.90%, ctx=3456588, majf=0, minf=0
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=2741175,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+   READ: bw=5710MiB/s (5988MB/s), 5710MiB/s-5710MiB/s (5988MB/s-5988MB/s), io=167GiB (180GB), run=30002-30002msec
+
+Disk stats (read/write):
+    cas1-1: ios=3613923/0, merge=0/0, ticks=569333/0, in_queue=4718, util=99.50%, aggrios=1005748/0, aggrmerge=0/0, aggrticks=208294/0, aggrin_queue=0, aggrutil=99.42%
+  nvme1n1: ios=1005748/0, merge=0/0, ticks=208294/0, in_queue=0, util=99.42%

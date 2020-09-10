@@ -19,7 +19,8 @@ group_reporting
 
 [file1]
 bs=65536
-numjobs=16
+numjobs=4
 iodepth=1
-size=100M
-filename=/dev/cas1-1
+size=1000M
+;filename=/dev/cas1-1
+filename=/dev/pmem0p1

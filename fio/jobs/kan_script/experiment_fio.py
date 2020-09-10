@@ -21,7 +21,10 @@ GB = 1024 * MB
 class Experiment(object):
     def __init__(self):
         # config something
-        self.exp_name = 'optane_flash'
+        #self.exp_name = 'optane_flash'
+        #self.exp_name = 'nvdimm_optane'
+        #self.exp_name = 'nvdimm_flash'
+        self.exp_name = 'dram_nvdimm'
         self.home_dir = '/home/kanwu/Research/open-cas-linux-mf/fio/jobs/kan_script/'
         self.res_dir = self.home_dir + 'results/' + self.exp_name
         self.tmp_dir = '/dev/shm/'
@@ -38,9 +41,13 @@ class Experiment(object):
 
         # experiment config
         config = {
-          'type': ['randread_optane_ssd_flash_80_hit'],
-          'script': ['./run_with_mf.sh mfwa', './run_with_pure.sh wa'],
-          'qd': [1, 3, 5, 6],
+          #'type': ['randread_optane_ssd_flash_80_hit'],
+          #'type': ['randread_nvdimm_99_hit'],
+          'type': ['randread_nvdimm_80_hit'],
+          'script': ['./run_with_mf.sh mfwa', './run_with_pure.sh wa'], # remember to modify the casadm commands
+          #'qd': [1, 3, 5, 6], # optane SSD as cache
+          #'qd': [4, 8, 12, 16], # NVDIMM as cache
+          'qd': [16], # NVDIMM as cache
         }
 
         # handle
@@ -71,8 +78,14 @@ class Experiment(object):
         # create job file
         with open('/home/kanwu/Research/open-cas-linux-mf/fio/jobs/kan_script/fio_jobs/'+config['type'] + '.fio.template', 'r') as input_file, open('/home/kanwu/Research/open-cas-linux-mf/fio/jobs/kan_script/fio_jobs/' + config['type'] + '.fio', 'w') as output_file:
             for line in input_file:
-                if 'iodepth' in line:
-                    output_file.write('iodepth=' + str(config['qd']) + '\n') 
+                #TODO optane SSD and NVDIMM as a cache is a bit different, since optane SSD use async IO
+                #if 'iodepth' in line:
+                #    output_file.write('iodepth=' + str(config['qd']) + '\n') 
+                #    continue
+                
+                if 'numjobs' in line:
+                    output_file.write('numjobs=' + str(config['qd']/2) + '\n')  #TODO divded by 2 to creat 80% hit ratios with two jobs, nvdimm as a cache, 80% hit rate
+                    #output_file.write('numjobs=' + str(config['qd']) + '\n')  #TODO divded by 2 to creat 80% hit ratios with two jobs, nvdimm as a cache, 80% hit rate
                     continue
                 
                 output_file.write(line)

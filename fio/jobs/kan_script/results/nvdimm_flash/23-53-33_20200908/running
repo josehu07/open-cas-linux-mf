@@ -1,0 +1,35 @@
+Stoped the running multi-factor monitor thread (if any)
+Successfully added cache instance 1
+Successfully added core 1 to cache instance 1
+Started multi-factor monitor thread on cache 1 - core 1
+You are switching to a multi-factor mode. Please be sure that a monitor thread has been started, otherwise this mode functions exactly the same as its non-mf counterpart
+See `casadm -M --help` for more info
+file1: (g=0): rw=randread, bs=(R) 64.0KiB-64.0KiB, (W) 64.0KiB-64.0KiB, (T) 64.0KiB-64.0KiB, ioengine=psync, iodepth=1
+...
+fio-3.14-11-g308a
+Starting 4 threads
+
+file1: (groupid=0, jobs=4): err= 0: pid=10174: Tue Sep  8 23:54:05 2020
+  read: IOPS=79.1k, BW=4941MiB/s (5181MB/s)(48.3GiB/10001msec)
+    clat (usec): min=19, max=13467, avg=49.81, stdev=37.64
+     lat (usec): min=19, max=13467, avg=49.86, stdev=37.64
+    clat percentiles (nsec):
+     | 25.0th=[47360], 50.0th=[48896], 75.0th=[50944], 99.0th=[61184]
+   bw (  MiB/s): min= 4722, max= 5054, per=99.93%, avg=4937.11, stdev=27.35, samples=76
+   iops        : min=75558, max=80866, avg=78993.89, stdev=437.57, samples=76
+  lat (usec)   : 20=0.01%, 50=61.95%, 100=37.83%, 250=0.20%, 500=0.01%
+  lat (usec)   : 750=0.01%, 1000=0.01%
+  lat (msec)   : 2=0.01%, 4=0.01%, 20=0.01%
+  cpu          : usr=3.89%, sys=17.28%, ctx=790597, majf=0, minf=0
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=790593,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+   READ: bw=4941MiB/s (5181MB/s), 4941MiB/s-4941MiB/s (5181MB/s-5181MB/s), io=48.3GiB (51.8GB), run=10001-10001msec
+
+Disk stats (read/write):
+    cas1-1: ios=1549137/0, merge=0/0, ticks=68790/0, in_queue=379, util=98.38%, aggrios=20901/0, aggrmerge=0/0, aggrticks=2642/0, aggrin_queue=388, aggrutil=20.43%
+  nvme0n1: ios=20901/0, merge=0/0, ticks=2642/0, in_queue=388, util=20.43%
