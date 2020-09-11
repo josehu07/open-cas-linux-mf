@@ -40,7 +40,10 @@ casadm -A -d /dev/nvme0n1 -i 1
 casadm -X -n seq-cutoff -i 1  -p never
 sudo casadm -Q -i 1 -c $1 
 
-
+# Optane SSD
 make multi_thread_aio ; ./multi_thread_aio /dev/cas1-1 $2 2 128 $3 $4
+
+# NVDIMM
+#make multi_thread_aio ; ./multi_thread_aio /dev/cas1-1 $2 8 128 $3 $4
 
 dmesg --clear

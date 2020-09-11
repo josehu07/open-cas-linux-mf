@@ -27,7 +27,7 @@ std::vector<long> read_order;
 // Note: all pos in sector unless before passed in read/write
 int SECTOR_SIZE = 512;
 int STRIDE_SIZE = SECTOR_SIZE * 1;      // chunk size actually
-int num_ios = 2000000;
+int num_ios = 5000000;
 int completed_ios = 0;
 
 int D = 0;
@@ -91,8 +91,10 @@ void generate_read_trace(char type) {
 	 
 	 long total_chunks = (long) 1*1024*1024*2/d; 
 	 long read_start_chunk = 0;
-	 long read_end_chunk = (long) (total_chunks * (0.5 + (shared_space_ratio/2)/100.0));
-	 long write_start_chunk = (long) (total_chunks * (0.5 - (shared_space_ratio/2)/100.0));
+	 long read_end_chunk = total_chunks;
+	 long write_start_chunk = (long) (total_chunks * (1.0 - (shared_space_ratio)/100.0));
+	 //long read_end_chunk = (long) (total_chunks * (0.5 + (shared_space_ratio/2)/100.0));
+	 //long write_start_chunk = (long) (total_chunks * (0.5 - (shared_space_ratio/2)/100.0));
 
 	 std::cout << "chunks for read and write, total: " << total_chunks << "\n";
 	 std::cout << "       reads: " << read_start_chunk << ", " << read_end_chunk << "\n";

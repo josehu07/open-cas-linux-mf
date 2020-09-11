@@ -1,0 +1,29 @@
+Stoped the running multi-factor monitor thread (if any)
+Successfully added cache instance 1
+Successfully added core 1 to cache instance 1
+make: 'multi_thread_aio' is up to date.
+===== Multi-thread libaio to Specified Device =====
+To run with:
+   write ratio: 10, num_threads: 8, request_size: 65536, device_name: /dev/cas1-1, shared_read_write_space_ratio: 50, qd: 16
+To read randomly
+chunks for read and write, total: 16384
+       reads: 0, 12288
+       writes: 4096, 16384
+Thread 2 ready to run 
+Thread 1 ready to run 
+Thread 0 ready to run 
+Thread 4 ready to run 
+Thread 3 ready to run 
+Thread 5 ready to run 
+Thread 6 ready to run 
+Thread 7 ready to run 
+Thread 0 issued all IOs
+Thread 5 issued all IOs
+Thread 3 issued all IOs
+Thread 6 issued all IOs
+Thread 2 issued all IOs
+Thread 4 issued all IOs
+Thread 7 issued all IOsThread 
+1 issued all IOs
+All IO finished
+Time taken: 24163121 us, Bandwidth: 5173.172852 MB/s 

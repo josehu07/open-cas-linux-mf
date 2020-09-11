@@ -21,8 +21,8 @@ GB = 1024 * MB
 class Experiment(object):
     def __init__(self):
         # config something
-        self.exp_name = 'optane_flash'
-        #self.exp_name = 'nvdimm_optane'
+        self.exp_name = 'optane_flash_20_80'
+        #self.exp_name = 'nvdimm_optane_16threads'
         #self.exp_name = 'nvdimm_flash'
         #self.exp_name = 'dram_nvdimm'
         self.home_dir = '/home/kanwu/Research/open-cas-linux-mf/fio/jobs/kan_script/'
@@ -41,10 +41,13 @@ class Experiment(object):
 
         # experiment config
         config = {
-          'type': ['mfwa', 'wa'],   # pure_mix
-          'write_ratio': [10], 
-          'read_write_shared_space': [0], 
-          'qd': [16], # for optane
+          #'type': ['mfwa', 'wa', 'mfwb', 'wb', 'mfwt', 'wt'],   # pure_mix
+          'type': ['mfwb', 'wb'],   # pure_mix
+          'write_ratio': [10, 30, 50], 
+          #'write_ratio': [0], 
+          #'read_write_shared_space': [10, 50], 
+          'read_write_shared_space': [20, 80], 
+          'qd': [16], # for optane and NVDIMM
         }
 
         # handle

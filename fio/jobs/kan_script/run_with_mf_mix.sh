@@ -41,6 +41,10 @@ sudo casadm -M -i 1 -j 1
 sudo casadm -Q -i 1 -c $1 
 
 
+# Optane SSD
 make multi_thread_aio ; ./multi_thread_aio /dev/cas1-1 $2 2 128 $3 $4
+
+# NVDIMM
+#make multi_thread_aio ; ./multi_thread_aio /dev/cas1-1 $2 8 128 $3 $4
 
 dmesg --clear
