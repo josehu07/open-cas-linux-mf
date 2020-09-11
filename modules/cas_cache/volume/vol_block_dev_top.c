@@ -89,6 +89,7 @@ void block_dev_complete_bio_fast(struct ocf_io *io, int error)
 	struct blk_data *data = ocf_io_get_data(io);
 	struct bio *bio = data->master_io_req;
 
+	// CAS_PRINT_RL(KERN_DEBUG "ORTHUS[block_dev_complete_bio_fast] Request start time: %lld", data->start_time);
 	_blockdev_end_io_acct(bio, data->start_time);
 
 	CAS_BIO_ENDIO(bio, CAS_BIO_BISIZE(bio), CAS_ERRNO_TO_BLK_STS(error));
@@ -105,13 +106,15 @@ void block_dev_complete_bio_discard(struct ocf_io *io, int error)
 }
 
 void block_dev_complete_rq(struct ocf_io *io, int error)
-
 {
 	struct blk_data *data = ocf_io_get_data(io);
 	struct request *rq = data->master_io_req;
+	uint64_t end_time = ktime_get_ns();
 
 	_blockdev_end_request_all(rq, error);
 	ocf_io_put(io);
+	// CAS_PRINT_RL(KERN_DEBUG "ORTHUS[block_dev_complete_rq] Request start time: %lld, End time: %lld, Latency:%lld", data -> start_time, end_time, end_time - data -> start_time);
+	ocf_mngt_mf_monitor_report_latency(end_time - data -> start_time);
 	cas_free_blk_data(data);
 }
 
@@ -121,6 +124,7 @@ void block_dev_complete_sub_rq(struct ocf_io *io, int error)
 	struct ocf_io *master = data->master_io_req;
 	struct blk_data *master_data = ocf_io_get_data(master);
 
+	// CAS_PRINT_RL(KERN_DEBUG "ORTHUS[block_dev_complete_sub_rq] Request start time: %lld", data->start_time);
 	if (error)
 		master_data->error = error;
 
@@ -197,6 +201,8 @@ static int _blockdev_alloc_many_requests(ocf_core_t core,
 		_blockdev_set_bio_data(data, bio);
 
 		data->master_io_req = master;
+
+		// CAS_PRINT_RL(KERN_DEBUG "ORTHUS[_blockdev_alloc_many_requests] Request start time: %lld", data->start_time);
 
 		sub_io = ocf_core_new_io(core,
 				cache_priv->io_queues[smp_processor_id()],
@@ -431,7 +437,9 @@ static int __block_dev_queue_rq(struct request *rq, ocf_core_t core)
 		_blockdev_set_request_data(data, rq);
 
 		data->master_io_req = rq;
+		data->start_time = ktime_get_ns();
 
+		// CAS_PRINT_RL(KERN_DEBUG "ORTHUS[ __block_dev_queue_rq] Request start time: %lld", data->start_time);
 		ret = ocf_io_set_data(io, data, 0);
 		if (ret) {
 			ocf_io_put(io);
@@ -765,6 +773,7 @@ static int _blockdev_make_request_fast(struct casdsk_disk *dsk,
 	data->master_io_req = bio;
 	data->start_time = jiffies;
 
+	// CAS_PRINT_RL(KERN_DEBUG "ORTHUS[_blockdev_make_request_fast] Request start time: %lld", data->start_time);
 	io = ocf_core_new_io(core, cache_priv->io_queues[smp_processor_id()],
 			CAS_BIO_BISECTOR(bio) << SECTOR_SHIFT,
 			CAS_BIO_BISIZE(bio), (bio_data_dir(bio) == READ) ?
