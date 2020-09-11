@@ -1,12 +1,13 @@
+
 #!/bin/bash
 
 if [[ $# -ne 4 ]]; then
-    echo "Please provide three arguments: the mf cache mode, write ratio(e.g. 50), shared read-write space ratio(e.g. 50) QD"
+    echo "Please provide three arguments: the cache mode, write ratio(e.g. 50), shared read-write space ratio(e.g. 50) QD"
     exit 1
 fi
 
-if [[ $1 -ne mfwa ]] && [[ $1 -ne mfwb ]] && [[ $1 -ne mfwt ]]; then
-    echo "Unrecognized mf cache mode: $1"
+if [[ $1 -ne wa ]] && [[ $1 -ne wb ]] && [[ $1 -ne wt ]]; then
+    echo "Unrecognized cache mode: $1"
     exit 2
 fi
 
@@ -37,7 +38,6 @@ casadm -A -d /dev/nvme0n1 -i 1
 
 
 casadm -X -n seq-cutoff -i 1  -p never
-sudo casadm -M -i 1 -j 1
 sudo casadm -Q -i 1 -c $1 
 
 
