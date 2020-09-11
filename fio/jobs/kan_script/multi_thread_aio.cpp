@@ -31,6 +31,7 @@ int num_ios = 2000000;
 int completed_ios = 0;
 
 int D = 0;
+int shared_space_ratio = 0;
 int j = 0;
 int d = 0;
 int fd = 0;
@@ -64,10 +65,10 @@ void *eachThread(void *vargp)
 	}
 	//std::cout << "to issue IO " << pos/4096 << std::endl;
         struct iocb * p = (struct iocb *)malloc(sizeof(struct iocb));
-        if (rand() % 100 >= D) {
-	    io_prep_pread(p, fd, read_buf, STRIDE_SIZE, pos);
+        if (pos % 2 == 0) {
+	    io_prep_pread(p, fd, read_buf, STRIDE_SIZE, pos / 2);
 	} else {
-	    io_prep_pwrite(p, fd, read_buf, STRIDE_SIZE, pos);
+	    io_prep_pwrite(p, fd, read_buf, STRIDE_SIZE, pos / 2);
 	}
 	p->data = (void *) read_buf;
 
@@ -86,53 +87,30 @@ void generate_read_trace(char type) {
      if (type == 'r') {
 	 std::cout << "To read randomly" << std::endl;
          srand(time(0));
-	 for (int i = 0; i < num_ios; i++)
-             read_order.push_back((long)((rand() %(1*1024*1024*2/d)))*STRIDE_SIZE);   //1 GB working set 
-     } else if (type == 's') {
-	 std::cout << "To read sequentially with offset " << D << std::endl;
-         for (int i = 0; i < num_ios; i++) {
-             // who is channel 1?
-	     // i*7 is in: (0+D*i)%7
-             //std::cout << i*7 << " in " << (D*i)%7 << " first channel: " << i*7 + (7-((D*i)%7-0)) %7 << std::endl;
-             //read_order.push_back((long)(i*7 + (7-((D*i)%7-0)) %7)*STRIDE_SIZE);
-             read_order.push_back((long)(i*STRIDE_SIZE));
-	 }
-         //exit(1);
-         //for (int i = 0; i < num_ios; i++)
-         //    read_order.push_back((long)(i)*STRIDE_SIZE);
-     } else if (type == 'j') {
-	 std::cout << "To read stridely with stride: " << D << std::endl;
-         for (int i = 0; i < num_ios; i++)
-             read_order.push_back((long)(i+0)*(STRIDE_SIZE + D*SECTOR_SIZE));
-     } else if (type == 'z') {
-	 std::cout << "To read zigzag" << std::endl;
-         for (int i = 0; i < num_ios; i++)
-             read_order.push_back((long)(i*7 + (i%2)*6)*STRIDE_SIZE);
-     } else if (type == 'p') {   // shear pair
-	 std::cout << "To read according to shear pair(randomly choose pattern, then, issue two parallel reads within each pattern at the same offsets)" << std::endl;
-         srand(time(0));
-	 std::cout << "Pattern size: " << pattern << std::endl;
-	 for (int i = 0; i < num_ios-1; i += 2) {
-             // segment number
-	     long segment = rand() % (800*1024*1024*2/(d*pattern));
-	     read_order.push_back(segment*(pattern*STRIDE_SIZE));
-             read_order.push_back(segment*(pattern*STRIDE_SIZE) + (D+d)*SECTOR_SIZE);
-	 }
-     } else if (type == 'e') {  // split sequential 8 sectors into 2*4 sectors etc
-	 std::cout << "To read stridely with stride: " << D << " and split 8 sectors "<< std::endl;
-         int small = 8/ (STRIDE_SIZE/SECTOR_SIZE);
-         num_ios *= small;
-	 for (int i = 0; i < num_ios/small; i++) {
-	     for (int j = 0; j < small; j++)
-	         read_order.push_back((long)(i)*(8*SECTOR_SIZE + D*SECTOR_SIZE) + j*STRIDE_SIZE);
-	 }
-     } else if (type == '1') {  // split 8 sectors into 1*QD sectors
-	 std::cout << "To read stridely with stride: " << D << " and choose " << max_qd << " out of each 8 sectors "<< std::endl;
-         int small = max_qd;
-         num_ios *= small;
-	 for (int i = 0; i < num_ios/small; i++) {
-	     for (int j = 0; j < small; j++)
-	         read_order.push_back((long)(i)*(8*SECTOR_SIZE + D*SECTOR_SIZE) + j*STRIDE_SIZE);
+	 long tmp_pos;
+	 
+	 long total_chunks = (long) 1*1024*1024*2/d; 
+	 long read_start_chunk = 0;
+	 long read_end_chunk = (long) (total_chunks * (0.5 + (shared_space_ratio/2)/100.0));
+	 long write_start_chunk = (long) (total_chunks * (0.5 - (shared_space_ratio/2)/100.0));
+
+	 std::cout << "chunks for read and write, total: " << total_chunks << "\n";
+	 std::cout << "       reads: " << read_start_chunk << ", " << read_end_chunk << "\n";
+	 std::cout << "       writes: " << write_start_chunk << ", " << total_chunks << "\n";
+
+	 for (int i = 0; i < num_ios; i++) {
+             if (rand() % 100 >= D) {
+	         // generate a read
+		 tmp_pos = (long)((rand() %(1*1024*1024*2/d)))*STRIDE_SIZE;
+	         tmp_pos = tmp_pos * 2;
+                 read_order.push_back(tmp_pos);
+	     } else {
+	         // generate a read
+		 tmp_pos = (long)((rand() %(1*1024*1024*2/d)))*STRIDE_SIZE;
+	         tmp_pos = tmp_pos * 2 + 1;
+                 read_order.push_back(tmp_pos);
+	     }
+	     
 	 }
      } else if (type == '4') {  // split 8 sectors into 1*QD sectors
          int small = 4;
@@ -153,10 +131,11 @@ int main(int argc, char* * argv) {
      printf("===== Multi-thread libaio to Specified Device =====\n");
      // identify chunk size
      if (argc < 7) {
-         printf("Wrong parameters: multi_thread_aio dev_name D(offset to jump, in unit of sector) j(num_parallel_jobs to submit IO) d(stride/io_size in sector) read_type(random/seq/jump) queue_depth\n");
+         printf("Wrong parameters: multi_thread_aio dev_name D(write_ratio) j(number of threads to submit IO) d(io_size in sector) shared_read_write_ratio(shared access space for reads and writes, e.g. 20%) queue_depth\n");
          return 1;
      }
      D = atoi(argv[2]);    //write ratio
+     shared_space_ratio = atoi(argv[5]); // shared read, write access space
      j = atoi(argv[3]);
      d = atoi(argv[4]);        // request size
      STRIDE_SIZE = SECTOR_SIZE * d;
@@ -165,7 +144,7 @@ int main(int argc, char* * argv) {
      pattern = atoi(argv[6])/16;
      job_queue.set_max(max_qd);
 
-     printf("To run with:\n    jump: %d, num_jobs: %d, write ratio: %d, device_name: %s, access_pattern: %s, max_qd: %d\n", D, j, d, argv[1], argv[5], max_qd);
+     printf("To run with:\n   write ratio: %d, num_threads: %d, request_size: %d, device_name: %s, shared_read_write_space_ratio: %s, qd: %d\n", D, j, STRIDE_SIZE, argv[1], argv[5], max_qd);
 
      // open raw block device
      fd = open(argv[1], O_RDWR | O_DIRECT);      // O_DIRECT
@@ -180,7 +159,7 @@ int main(int argc, char* * argv) {
         exit(1);
     }
     // generate read trace
-    generate_read_trace(argv[5][0]);
+    generate_read_trace('r');
 
      //parallel reads
      
