@@ -101,12 +101,14 @@ void generate_read_trace(char type) {
 	 for (int i = 0; i < num_ios; i++) {
              if (rand() % 100 >= D) {
 	         // generate a read
-		 tmp_pos = (long)((rand() %(1*1024*1024*2/d)))*STRIDE_SIZE;
+		 //tmp_pos = (long)((rand() %(1*1024*1024*2/d)))*STRIDE_SIZE;
+		 tmp_pos = (long)(rand()%(read_end_chunk - read_start_chunk) + read_start_chunk) * STRIDE_SIZE;
 	         tmp_pos = tmp_pos * 2;
                  read_order.push_back(tmp_pos);
 	     } else {
 	         // generate a read
-		 tmp_pos = (long)((rand() %(1*1024*1024*2/d)))*STRIDE_SIZE;
+		 tmp_pos = (long)(rand()%(total_chunks - write_start_chunk) + write_start_chunk) * STRIDE_SIZE;
+		 //tmp_pos = (long)((rand() %(1*1024*1024*2/d)))*STRIDE_SIZE;
 	         tmp_pos = tmp_pos * 2 + 1;
                  read_order.push_back(tmp_pos);
 	     }
