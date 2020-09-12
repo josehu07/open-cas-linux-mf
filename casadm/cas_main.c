@@ -57,6 +57,9 @@ struct command_args{
 	int no_flush;
 	const char* cache_device;
 	const char* core_device;
+	/*========== [Orthus FLAG BEGIN] ==========*/
+	int tuning_mode;
+	/*========== [Orthus FLAG END] ==========*/
 	uint32_t params_type;
 	uint32_t params_count;
 	bool verbose;
@@ -83,6 +86,9 @@ static struct command_args command_args_values = {
 		.no_flush = false,
 		.cache_device = NULL,
 		.core_device = NULL,
+		/*========== [Orthus FLAG BEGIN] ==========*/
+		.tuning_mode = ocf_tuning_mode_default,
+		/*========== [Orthus FLAG END] ==========*/	
 
 		.params_type = 0,
 		.params_count = 0,
@@ -153,7 +159,12 @@ int command_handle_option(char *opt, const char **arg)
 		command_args_values.detach = true;
 	} else if (!strcmp(opt, "no-flush")) {
 		command_args_values.no_flush = true;
-	} else {
+	} else if (!strcmp(opt, "tuning-mode")) {
+		command_args_values.tuning_mode = validate_str_tuning_mode((const char *)arg[0]);
+		if (command_args_values.tuning_mode < 0)
+			return FAILURE;
+	} 
+	else {
 		return FAILURE;
 	}
 
@@ -1788,6 +1799,7 @@ static int handle_version(void)
 static cli_option mf_monitor_start_options[] = {
 	{'i', "cache-id", CACHE_ID_DESC, 1, "ID", CLI_OPTION_REQUIRED},
 	{'j', "core-id", CORE_ID_DESC, 1, "ID", CLI_OPTION_REQUIRED},
+	{'m', "tuning-mode", "Choose from three targerts function for tuning: throughput, avg latency and tail latency", 1, "NAME", CLI_OPTION_REQUIRED},
 	{0}
 };
 
@@ -1795,12 +1807,12 @@ static int handle_mf_monitor_start(void)
 {
 	int ret;
 
-	ret = mf_monitor_start(command_args_values.cache_id, command_args_values.core_id);
+	ret = mf_monitor_start(command_args_values.cache_id, command_args_values.core_id, command_args_values.tuning_mode);
 	if (ret)
 		return FAILURE;
 
-	cas_printf(LOG_INFO, "Started multi-factor monitor thread on cache %d - core %d\n",
-		                 command_args_values.cache_id, command_args_values.core_id);
+	cas_printf(LOG_INFO, "Started multi-factor monitor thread on cache %d - core %d with tuning mode:%s\n",
+		                 command_args_values.cache_id, command_args_values.core_id, tuning_mode_to_name_long((uint8_t)command_args_values.tuning_mode));
 
 	return SUCCESS;
 }

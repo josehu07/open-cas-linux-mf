@@ -262,6 +262,15 @@ static struct name_to_val_mapping cache_mode_names[] = {
 	{ NULL }
 };
 
+/*========== [Orthus FLAG BEGIN] ==========*/
+static struct name_to_val_mapping cache_tuning_names[] = {
+	{ .short_name = "tp", .long_name = "Throughput", .value = ocf_mf_tp },
+	{ .short_name = "al", .long_name = "Average Latency", .value = ocf_mf_avg_la },
+	{ .short_name = "tl", .long_name = "Tail Latency", .value = ocf_mf_tail_la },
+	{ NULL }
+};
+	/*========== [Orthus FLAG END] ==========*/
+
 static struct name_to_val_mapping cleaning_policy_names[] = {
 	{ .short_name = "nop", .value = ocf_cleaning_nop },
 	{ .short_name = "alru", .value = ocf_cleaning_alru },
@@ -433,6 +442,18 @@ inline int validate_str_cache_mode(const char *s)
 {
 	return validate_str_val_mapping(s, cache_mode_names, -1);
 }
+/*========== [Orthus FLAG BEGIN] ==========*/
+inline int validate_str_tuning_mode(const char *s)
+{
+	return validate_str_val_mapping(s, cache_tuning_names, -1);
+}
+
+inline const char *tuning_mode_to_name_long(uint8_t tuning_mode)
+{
+	return val_to_long_name(tuning_mode, cache_tuning_names, "Unknown");
+
+}
+/*========== [Orthus FLAG END] ==========*/
 
 inline int validate_str_cln_policy(const char *s)
 {
@@ -1855,7 +1876,7 @@ int check_if_mounted(int cache_id, int core_id)
 }
 
 /*========== [Orthus FLAG BEGIN] ==========*/
-int mf_monitor_start(uint16_t cache_id, uint16_t core_id)
+int mf_monitor_start(uint16_t cache_id, uint16_t core_id, ocf_tuning_mode_t tuning_mode)
 {
 	int fd = 0, ioctl_ret;
 	struct kcas_mf_monitor_start cmd;
@@ -1867,6 +1888,7 @@ int mf_monitor_start(uint16_t cache_id, uint16_t core_id)
 	memset(&cmd, 0, sizeof(cmd));
 	cmd.cache_id = cache_id;
 	cmd.core_id = core_id;
+	cmd.tuning_mode = tuning_mode;
 
 	ioctl_ret = ioctl(fd, KCAS_IOCTL_MF_MONITOR_START, &cmd);
 	if (ioctl_ret < 0) {

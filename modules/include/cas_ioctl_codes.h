@@ -117,7 +117,7 @@ struct kcas_insert_core {
 struct kcas_mf_monitor_start {
 	uint16_t cache_id; /**< id of a running cache */
 	uint16_t core_id; /**< id core object to monitor. */
-
+	ocf_tuning_mode_t tuning_mode; /**< tuning mode of the monitor. */ 
 	int ext_err_code;
 };
 

@@ -101,6 +101,10 @@ const char *metadata_variant_to_name(uint8_t variant);
 const char *metadata_mode_to_name(uint8_t metadata_mode);
 const char *seq_cutoff_policy_to_name(uint8_t seq_cutoff_policy);
 
+/*========== [Orthus FLAG BEGIN] ==========*/
+const char *tuning_mode_to_name_long(uint8_t tuning_mode);
+/*========== [Orthus FLAG END] ==========*/
+
 __attribute__((format(printf, 2, 3)))
 typedef int (*cas_printf_t)(int log_level, const char *format, ...);
 
@@ -225,7 +229,7 @@ int add_core(unsigned int cache_id, unsigned int core_id, const char *core_devic
 int get_core_info(int fd, int cache_id, int core_id, struct kcas_core_info *info);
 
 /*========== [Orthus FLAG BEGIN] ==========*/
-int mf_monitor_start(uint16_t cache_id, uint16_t core_id);
+int mf_monitor_start(uint16_t cache_id, uint16_t core_id, ocf_tuning_mode_t tuning_mode);
 int mf_monitor_stop(void);
 /*========== [Orthus FLAG END] ==========*/
 
@@ -271,6 +275,9 @@ int validate_str_unum(const char *source_str, const char *msg, unsigned int min,
 int validate_path(const char *path, int exist);
 
 int validate_str_cache_mode(const char *s);
+/*========== [Orthus FLAG BEGIN] ==========*/
+int validate_str_tuning_mode(const char *s);
+/*========== [Orthus FLAG END] ==========*/
 int validate_str_ev_policy(const char *s);
 int validate_str_cln_policy(const char *s);
 int validate_str_promotion_policy(const char *s);
