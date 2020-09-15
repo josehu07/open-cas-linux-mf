@@ -1,0 +1,49 @@
+===== Issuing Synthetic Workloads to the Caching Monitor =====
+/dev/ram0 caching for /dev/pmem0
+Number of IOs1300000
+==== Here to prepare the cache monitor
+This is to start a migration listening thread
+This is to set context
+Thread 0 ready to run 
+This is to start a real listening thread
+This is to start a migration listening thread
+This is to start a migration listening threadThis is to start a migration listening thread
+
+rate = 40.282 kreq/s, hit ratio = 25.9%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.152 kreq/s, hit ratio = 30.1%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.055 kreq/s, hit ratio = 30%, evict ratio = 0%, dirty ratio = 0%
+rate = 40.949 kreq/s, hit ratio = 29.8%, evict ratio = 0%, dirty ratio = 0%
+rate = 40.889 kreq/s, hit ratio = 30.3%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.079 kreq/s, hit ratio = 30.5%, evict ratio = 0%, dirty ratio = 0%
+rate = 40.976 kreq/s, hit ratio = 29.6%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.091 kreq/s, hit ratio = 30.1%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.038 kreq/s, hit ratio = 30%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.255 kreq/s, hit ratio = 30.3%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.149 kreq/s, hit ratio = 29.9%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.074 kreq/s, hit ratio = 30%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.181 kreq/s, hit ratio = 29.8%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.25 kreq/s, hit ratio = 30.1%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.142 kreq/s, hit ratio = 29.7%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.235 kreq/s, hit ratio = 30%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.195 kreq/s, hit ratio = 30.1%, evict ratio = 0%, dirty ratio = 0%
+rate = 40.723 kreq/s, hit ratio = 30%, evict ratio = 0%, dirty ratio = 0%
+rate = 40.583 kreq/s, hit ratio = 29.7%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.03 kreq/s, hit ratio = 30.1%, evict ratio = 0%, dirty ratio = 0%
+rate = 40.944 kreq/s, hit ratio = 29.8%, evict ratio = 0%, dirty ratio = 0%
+rate = 40.964 kreq/s, hit ratio = 29.9%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.038 kreq/s, hit ratio = 30.3%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.119 kreq/s, hit ratio = 29.9%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.345 kreq/s, hit ratio = 30.6%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.042 kreq/s, hit ratio = 29.5%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.344 kreq/s, hit ratio = 30%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.207 kreq/s, hit ratio = 30%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.001 kreq/s, hit ratio = 29.3%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.218 kreq/s, hit ratio = 30.2%, evict ratio = 0%, dirty ratio = 0%
+rate = 41.109 kreq/s, hit ratio = 29.9%, evict ratio = 0%, dirty ratio = 0%
+rate = 27.342 kreq/s, hit ratio = 30%, evict ratio = 0%, dirty ratio = 0%
+Overall: 1300001 evict: 0
+==== Here to end
+Thread 2 issued all IOs
+Thread Thread 1 issued all IOs3 issued all IOs
+
+Thread 0 issued all IOs

@@ -1,0 +1,44 @@
+===== Issuing Synthetic Workloads to the Caching Monitor =====
+/dev/pmem0 caching for /dev/nvme1n1
+This will not be a cache
+Number of IOs1100000
+==== Here to prepare the cache monitor
+This is to start a migration listening thread
+This is to set context
+Thread 0 ready to run 
+Thread 1 ready to run 
+Thread 2 ready to run 
+Thread 3 ready to run 
+This is to start a real listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+rate = 76.954 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.986 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.935 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.884 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.958 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.962 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.933 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.969 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 77.004 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.799 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.672 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.656 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.912 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 76.822 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 23.555 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+Overall: 1100001 evict: 0
+==== Here to end
+Thread 1 issued all IOs
+Thread Thread 7 issued all IOs3 issued all IOs
+Thread 0 issued all IOs
+Thread 6 issued all IOs
+
+Thread 2 issued all IOs
+Thread 5 issued all IOs
+Thread 4 issued all IOs

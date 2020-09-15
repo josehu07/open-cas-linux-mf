@@ -1,0 +1,30 @@
+===== Issuing Synthetic Workloads to the Caching Monitor =====
+/dev/pmem0 caching for /dev/nvme1n1
+Number of IOs1700000
+==== Here to prepare the cache monitor
+This is to start a migration listening thread
+Thread 2 ready to run 
+Thread 0 ready to run 
+Thread 1 ready to run 
+This is to set context
+Thread 3 ready to run 
+This is to start a migration listening thread
+This is to start a real listening thread
+This is to start a migration listening threadThis is to start a migration listening thread
+
+rate = 169.24 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 170.98 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 171.16 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 170.82 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 171.23 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 168.94 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 170.07 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 170.9 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 170.69 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+rate = 165.97 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%
+Overall: 1700001 evict: 0
+==== Here to end
+Thread Thread 2 issued all IOs1
+ issued all IOsThread 0 issued all IOs
+Thread 3 issued all IOs
+

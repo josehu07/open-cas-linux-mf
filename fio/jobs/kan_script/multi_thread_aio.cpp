@@ -27,7 +27,7 @@ std::vector<long> read_order;
 // Note: all pos in sector unless before passed in read/write
 int SECTOR_SIZE = 512;
 int STRIDE_SIZE = SECTOR_SIZE * 1;      // chunk size actually
-int num_ios = 5000000;
+int num_ios = 2000000;
 int completed_ios = 0;
 
 int D = 0;

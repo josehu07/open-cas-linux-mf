@@ -1,0 +1,46 @@
+===== Issuing Synthetic Workloads to the Caching Monitor =====
+/dev/nvme1n1 caching for /dev/nvme0n1
+==== Here to prepare the cache monitor
+This is to start a migration listening thread
+Thread 1 ready to run 
+Thread 0 ready to run 
+This is to set context
+Thread 2 ready to run 
+Thread 4 ready to run 
+Thread 5 ready to run 
+Thread 3 ready to run 
+Thread 6 ready to run 
+Thread 7 ready to run 
+Thread 8 ready to run 
+Thread 9 ready to run 
+Thread 10 ready to run 
+Thread 11 ready to run 
+Thread 13 ready to run 
+Thread 14 ready to run 
+Thread 12 ready to run 
+Thread 15 ready to run 
+This is to start a real listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+rate = 93.273 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 94.752 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 94.566 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 95.4 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 96.927 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 25.083 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+Overall: 500001 hit: 0 evict: 0
+Read   : 449977 Write: 50024
+==== Here to end
+Thread 7 issued all IOs
+Thread Thread 3 issued all IOs
+Thread Thread Thread 4 issued all IOs20Thread Thread  issued all IOs
+65 issued all IOs1
+ issued all IOs
+ issued all IOs
+ issued all IOs
+

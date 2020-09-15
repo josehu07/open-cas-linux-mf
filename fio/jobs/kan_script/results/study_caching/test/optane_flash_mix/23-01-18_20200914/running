@@ -1,0 +1,38 @@
+===== Issuing Synthetic Workloads to the Caching Monitor =====
+/dev/nvme1n1 caching for /dev/nvme0n1
+==== Here to prepare the cache monitor
+This is to start a migration listening thread
+This is to set context
+Thread 0 ready to run 
+Thread 2 ready to run 
+Thread 1 ready to run 
+Thread 3 ready to run 
+This is to start a real listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+This is to start a migration listening thread
+rate = 53.608 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 54.504 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 53.703 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 54.494 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 54.298 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 55.183 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 54.487 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 54.631 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 53.637 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 11.456 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+Overall: 500001 hit: 0 evict: 0
+Read   : 250209 Write: 249792
+==== Here to end
+Thread 3 issued all IOs
+Thread 0Thread  issued all IOsThread 1Thread  issued all IOs
+Thread 6
+ issued all IOsThread 52
+4 issued all IOs
+Thread 7 issued all IOs issued all IOs
+
+ issued all IOs

@@ -1,0 +1,42 @@
+===== Issuing Synthetic Workloads to the Caching Monitor =====
+/dev/nvme1n1 caching for /dev/nvme0n1
+This will not be a cache
+==== Here to prepare the cache monitor
+This is to start a migration listening thread
+Thread 0 ready to run 
+Thread 1 ready to run 
+This is to set context
+Thread 2 ready to run 
+Thread 3 ready to run 
+This is to start a real listening threadThis is to start a migration listening thread
+
+This is to start a migration listening threadThis is to start a migration listening thread
+This is to start a migration listening threadThis is to start a migration listening thread
+
+
+This is to start a migration listening thread
+This is to start a migration listening thread
+rate = 39.477 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 38.465 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 38.954 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 39.096 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 38.911 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 39.144 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 38.629 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 39.608 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 39.221 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 38.782 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 38.937 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 38.794 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+rate = 31.983 kreq/s, hit ratio = 0%, evict ratio = 0%, dirty ratio = 0%, discard 0 kreq/s
+Overall: 500001 hit: 0 evict: 0
+Read   : 249860 Write: 250141
+==== Here to end
+Thread 0 issued all IOs
+Thread Thread 2 issued all IOsThread 
+4 issued all IOsThread 
+Thread 673 issued all IOs
+Thread  issued all IOs
+1 issued all IOs
+Thread 5 issued all IOs
+ issued all IOs

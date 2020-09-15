@@ -7,18 +7,20 @@ buffered=0
 thread=1
 time_based
 runtime=10
-ramp_time=10
+ramp_time=5
 refill_buffers
 log_max_value=1
 percentile_list=25.0:50.0:75.0:99.0
 group_reporting
-random_distribution=zipf:1.1
+;random_distribution=zipf:1.1
  
 
 [file1]
 ;bs=16384
-bs=65536
-numjobs=1
-iodepth=8
+bs=32768
+;bs=65536
+numjobs=4
+iodepth=4
 size=1048M
-filename=/dev/cas1-1
+;filename=/dev/cas1-1
+filename=/dev/pmem0
