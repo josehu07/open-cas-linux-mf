@@ -1,0 +1,38 @@
+Stoped the running multi-factor monitor thread (if any)
+Successfully added cache instance 1
+Successfully added core 1 to cache instance 1
+Started multi-factor monitor thread on cache 1 - core 1
+You are switching to a multi-factor mode. Please be sure that a monitor thread has been started, otherwise this mode functions exactly the same as its non-mf counterpart
+See `casadm -M --help` for more info
+file1: (g=0): rw=randread, bs=(R) 64.0KiB-64.0KiB, (W) 64.0KiB-64.0KiB, (T) 64.0KiB-64.0KiB, ioengine=libaio, iodepth=1
+...
+fio-3.14-11-g308a
+Starting 16 threads
+
+file1: (groupid=0, jobs=16): err= 0: pid=5351: Wed Sep 16 00:56:39 2020
+  read: IOPS=133k, BW=8324MiB/s (8728MB/s)(163GiB/20002msec)
+    slat (usec): min=4, max=526, avg=18.16, stdev=28.65
+    clat (nsec): min=322, max=8318.0k, avg=100450.46, stdev=58259.67
+     lat (usec): min=18, max=8330, avg=118.78, stdev=50.74
+    clat percentiles (usec):
+     | 25.0th=[   69], 50.0th=[   98], 75.0th=[  123], 80.0th=[  129],
+     | 85.0th=[  139], 90.0th=[  159], 95.0th=[  217], 99.0th=[  302]
+   bw (  MiB/s): min= 8161, max= 8550, per=99.99%, avg=8323.26, stdev= 4.58, samples=631
+   iops        : min=130580, max=136800, avg=133172.10, stdev=73.31, samples=631
+  lat (nsec)   : 500=7.26%, 750=1.01%, 1000=0.14%
+  lat (usec)   : 2=0.10%, 4=0.01%, 10=0.01%, 20=0.01%, 50=4.05%
+  lat (usec)   : 100=39.84%, 250=44.62%, 500=2.95%, 750=0.01%
+  lat (msec)   : 2=0.01%, 4=0.01%, 10=0.01%
+  cpu          : usr=2.74%, sys=11.13%, ctx=2736540, majf=0, minf=0
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=2663947,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+   READ: bw=8324MiB/s (8728MB/s), 8324MiB/s-8324MiB/s (8728MB/s-8728MB/s), io=163GiB (175GB), run=20002-20002msec
+
+Disk stats (read/write):
+    cas1-1: ios=10476698/0, merge=0/0, ticks=1181362/0, in_queue=2748, util=99.94%, aggrios=2475719/0, aggrmerge=0/0, aggrticks=330578/0, aggrin_queue=0, aggrutil=96.87%
+  nvme1n1: ios=2475719/0, merge=0/0, ticks=330578/0, in_queue=0, util=96.87%

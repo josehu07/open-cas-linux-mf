@@ -5,8 +5,8 @@ if [[ $# -ne 2 ]]; then
     exit 1
 fi
 
-if [[ $1 -ne wa ]] && [[ $1 -ne wb ]] && [[ $1 -ne wt ]]; then
-    echo "Unrecognized cache mode: $1"
+if [[ $1 -ne mfwa ]] && [[ $1 -ne mfwb ]] && [[ $1 -ne mfwt ]]; then
+    echo "Unrecognized mf cache mode: $1"
     exit 2
 fi
 
@@ -24,6 +24,7 @@ casadm -S -d /dev/pmem0p1 -x 64  --force
 
 
 
+
 # Flash SSD as core
 #casadm -A -d /dev/nvme0n1 -i 1
 
@@ -34,10 +35,12 @@ casadm -A -d /dev/nvme1n1 -i 1
 #casadm -A -d /dev/pmem0 -i 1
 
 
+
 casadm -X -n seq-cutoff -i 1  -p never
+sudo casadm -M -i 1 -j 1 -m tl
 sudo casadm -Q -i 1 -c $1 
 
 
-fio $2 
+fio $2
 
 dmesg --clear

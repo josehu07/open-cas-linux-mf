@@ -1,0 +1,3 @@
+parted /mnt/pmem0
+mklabel gpt
+mkpart primary 0 1396MB

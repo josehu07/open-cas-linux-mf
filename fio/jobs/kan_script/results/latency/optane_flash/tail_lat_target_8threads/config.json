@@ -1,0 +1,1 @@
+{"type": "randread_nvdimm_99_hit", "qd": 8, "script": "./run_with_mf_tail_latency.sh mfwa"}

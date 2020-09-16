@@ -1,7 +1,7 @@
 [global]
 name=fio-randread-bench
-rw=randread
 ioengine=libaio
+rw=randread
 direct=1
 buffered=0
 thread=1
