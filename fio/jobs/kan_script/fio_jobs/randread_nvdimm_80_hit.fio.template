@@ -12,6 +12,7 @@ refill_buffers
 log_max_value=1
 percentile_list=25.0:50.0:75.0:99.0
 group_reporting
+lat_percentiles=1
 ;random_distribution=zipf:1.01
  
 

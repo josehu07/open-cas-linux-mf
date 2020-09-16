@@ -10,7 +10,8 @@ runtime=10
 ramp_time=10
 refill_buffers
 log_max_value=1
-percentile_list=25.0:50.0:75.0:99.0
+percentile_list=25.0:50.0:75.0:80.0:85.0:90.0:95.0:99.0:99.9
+lat_percentiles=1
 group_reporting
 ;random_distribution=zipf:1.01
  

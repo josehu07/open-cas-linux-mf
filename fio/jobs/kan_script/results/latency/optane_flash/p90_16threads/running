@@ -1,0 +1,37 @@
+Stoped the running multi-factor monitor thread (if any)
+Successfully added cache instance 1
+Successfully added core 1 to cache instance 1
+Started multi-factor monitor thread on cache 1 - core 1 with tuning mode:Tail Latency
+You are switching to a multi-factor mode. Please be sure that a monitor thread has been started, otherwise this mode functions exactly the same as its non-mf counterpart
+See `casadm -M --help` for more info
+file1: (g=0): rw=randread, bs=(R) 64.0KiB-64.0KiB, (W) 64.0KiB-64.0KiB, (T) 64.0KiB-64.0KiB, ioengine=libaio, iodepth=1
+...
+fio-3.14-11-g308a
+Starting 16 threads
+
+file1: (groupid=0, jobs=16): err= 0: pid=22360: Wed Sep 16 03:05:39 2020
+  read: IOPS=70.1k, BW=4382MiB/s (4595MB/s)(42.8GiB/10001msec)
+    slat (nsec): min=10412, max=73645, avg=14302.20, stdev=2067.49
+    clat (usec): min=17, max=814, avg=212.74, stdev=83.32
+     lat (usec): min=45, max=830, avg=227.22, stdev=83.32
+     lat percentiles (usec):
+     | 25.0th=[  165], 50.0th=[  221], 75.0th=[  285], 80.0th=[  302],
+     | 85.0th=[  318], 90.0th=[  338], 95.0th=[  371], 99.0th=[  433],
+     | 99.9th=[  545]
+   bw (  MiB/s): min= 4182, max= 4529, per=100.00%, avg=4384.43, stdev= 6.04, samples=304
+   iops        : min=66914, max=72464, avg=70150.74, stdev=96.59, samples=304
+  lat (usec)   : 20=0.01%, 50=1.49%, 100=5.08%, 250=61.67%, 500=31.58%
+  lat (usec)   : 750=0.18%, 1000=0.01%
+  cpu          : usr=0.98%, sys=4.98%, ctx=1402368, majf=0, minf=0
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=701178,0,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+   READ: bw=4382MiB/s (4595MB/s), 4382MiB/s-4382MiB/s (4595MB/s-4595MB/s), io=42.8GiB (45.0GB), run=10001-10001msec
+
+Disk stats (read/write):
+    cas1-1: ios=2342898/0, merge=0/0, ticks=619119/0, in_queue=1861, util=99.69%, aggrios=993206/0, aggrmerge=0/0, aggrticks=194681/0, aggrin_queue=208, aggrutil=91.39%
+  nvme0n1: ios=993206/0, merge=0/0, ticks=194681/0, in_queue=208, util=91.39%
