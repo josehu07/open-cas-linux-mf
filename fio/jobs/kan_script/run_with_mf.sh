@@ -37,7 +37,7 @@ casadm -A -d /dev/nvme0n1 -i 1
 
 
 casadm -X -n seq-cutoff -i 1  -p never
-sudo casadm -M -i 1 -j 1
+sudo casadm -M -i 1 -j 1 -m tl
 sudo casadm -Q -i 1 -c $1 
 
 

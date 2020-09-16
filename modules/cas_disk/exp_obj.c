@@ -72,9 +72,9 @@ static inline void _casdsk_exp_obj_handle_bio_att(struct casdsk_disk *dsk,
 {
 	int status = CASDSK_BIO_NOT_HANDLED;
 
-	//if (likely(dsk->exp_obj->ops->make_request_fn))
-	//	status = dsk->exp_obj->ops->
-	//			make_request_fn(dsk, q, bio, dsk->private);
+	// if (likely(dsk->exp_obj->ops->make_request_fn))
+	// 	status = dsk->exp_obj->ops->
+	// 			make_request_fn(dsk, q, bio, dsk->private);
 
 	if (status == CASDSK_BIO_NOT_HANDLED)
 		dsk->exp_obj->mk_rq_fn(q, bio);

@@ -133,7 +133,7 @@ static const int NOT_QUIT_ON_100_CHANCES = 10;
 Then, start the monitor and switch the cache to a multi-factor cache mode, for example `mfwa`:
 
 ```bash
-$ sudo casadm -M -i 1 -j 1              # Start multi-factor monitor to monitor core 1-1
+$ sudo casadm -M -i 1 -j 1 -m tl             # Start multi-factor monitor to monitor core 1-1 with tail latency mode different mode [tp|al|tl]
 $ sudo casadm -Q -i 1 -c mfwa           # Switch cache 1 to Multi-Factor Write-Around
 ```
 
