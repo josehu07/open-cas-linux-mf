@@ -1,8 +1,8 @@
 
 #!/bin/bash
 
-if [[ $# -ne 4 ]]; then
-    echo "Please provide four arguments: the cache mode, write ratio(e.g. 50), shared read-write space ratio(e.g. 50) QD"
+if [[ $# -ne 2 ]]; then
+    echo "Please provide two arguments: the cache mode, T(the time us we change the read ratio)"
     exit 1
 fi
 
@@ -41,7 +41,7 @@ casadm -X -n seq-cutoff -i 1  -p never
 sudo casadm -Q -i 1 -c $1 
 
 # Optane SSD
-make multi_thread_aio ; ./multi_thread_aio /dev/cas1-1 $2 2 128 $3 $4
+make multi_thread_aio_dynamic ; ./multi_thread_aio_dynamic /dev/cas1-1 $2 2 128 16
 
 # NVDIMM
 #make multi_thread_aio ; ./multi_thread_aio /dev/cas1-1 $2 8 128 $3 $4
