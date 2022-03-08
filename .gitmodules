@@ -3,4 +3,4 @@
 	url = https://github.com/Open-CAS/test-framework.git
 [submodule "ocf"]
 	path = ocf
-	url = git@github.com:josehu07/ocf-mf.git
+	url = https://github.com/josehu07/ocf-mf.git
