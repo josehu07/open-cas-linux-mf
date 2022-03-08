@@ -52,7 +52,7 @@ Clone the repo recursively (there is a submodule - the OCF framework):
 ```bash
 $ git clone --recursive git@github.com:josehu07/open-cas-linux-mf.git
 $ cd open-cas-linux-mf
-$ git submodule update --init --update
+$ git submodule update --init --recursive
 ```
 
 ### Install Open-CAS-Linux
