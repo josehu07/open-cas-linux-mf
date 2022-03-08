@@ -1439,7 +1439,7 @@ int cache_mngt_mf_monitor_start(struct kcas_mf_monitor_start *cmd)
 	if (result < 0)
 		return result;
 
-	result = ocf_mngt_mf_monitor_init(core);
+	result = ocf_mngt_mf_monitor_start(core);
 	if (result)
 		return result;
 
