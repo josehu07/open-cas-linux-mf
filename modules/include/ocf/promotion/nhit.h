@@ -1,1 +1,1 @@
-/users/josehu/open-cas-linux-mf/ocf/inc/promotion/nhit.h
+../../../../ocf/inc/promotion/nhit.h
